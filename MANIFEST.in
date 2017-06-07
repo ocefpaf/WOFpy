@@ -1,6 +1,7 @@
 include *.txt
 recursive-include wof/flask/templates *
 recursive-include wof/examples/flask/odm2/timeseries *
+recursive-include wof/examples/production_configs *
 prune wof/examples/flask/barebones*
 prune wof/examples/flask/csv_server*
 prune wof/examples/flask/csv_tutorial*
