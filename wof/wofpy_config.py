@@ -47,6 +47,8 @@ def makedirs(directory):
 
 def copytree(src, dst, symlinks=False, ignore=None):
     for item in os.listdir(src):
+        if '.pyc' in item:
+            continue
         s = os.path.join(src, item)
         d = os.path.join(dst, item)
         if os.path.isdir(s):
@@ -58,7 +60,7 @@ def copytree(src, dst, symlinks=False, ignore=None):
 def main():
     args = docopt(__doc__, version='0.1.0')
     directory = args.get('INDIR')
-    mode = args.get('--mode') 
+    mode = args.get('--mode')
     if mode not in ['development', 'production']:
         raise ValueError('Got mode: {!r}, expected development, or production.'.format(mode))
 
