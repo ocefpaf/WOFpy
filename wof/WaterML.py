@@ -7,17 +7,19 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-from six import string_types
-
-import sys
-import getopt
 import re as re_
+
+from six import string_types
 
 etree_ = None
 Verbose_import_ = False
-(   XMLParser_import_none, XMLParser_import_lxml,
+
+(
+    XMLParser_import_none,
+    XMLParser_import_lxml,
     XMLParser_import_elementtree
-    ) = range(3)
+    ) = list(range(3))
+
 XMLParser_import_library = None
 try:
     # lxml
@@ -52,22 +54,29 @@ except ImportError:
                     import elementtree.ElementTree as etree_
                     XMLParser_import_library = XMLParser_import_elementtree
                     if Verbose_import_:
-                        print("running with ElementTree")
+                        print('running with ElementTree')
                 except ImportError:
-                    raise ImportError("Failed to import ElementTree from any known place")
+                    raise ImportError(
+                        'Failed to import ElementTree from any known place'
+                    )
 
 
 class GeneratedsSuper(object):
     def gds_format_string(self, input_data, input_name=''):
         return input_data
+
     def gds_format_integer(self, input_data, input_name=''):
         return '%d' % input_data
+
     def gds_format_float(self, input_data, input_name=''):
         return "{0}".format(input_data)
+
     def gds_format_double(self, input_data, input_name=''):
         return "{0}".format(input_data)
+
     def gds_format_boolean(self, input_data, input_name=''):
         return '%s' % input_data
+
     def gds_str_lower(self, instring):
         return instring.lower()
 
@@ -83,22 +92,25 @@ STRING_CLEANUP_PAT = re_.compile(r"[\n\r\s]+")
 # Support/utility functions.
 #
 
+
 def showIndent(outfile, level):
     for idx in range(level):
         outfile.write(u'    ')
 
+
 def quote_xml(inStr):
     if not inStr:
         return ''
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, string_types) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
     s1 = s1.replace('>', '&gt;')
     return s1
 
+
 def quote_attrib(inStr):
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, string_types) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
@@ -111,6 +123,7 @@ def quote_attrib(inStr):
     else:
         s1 = '"%s"' % s1
     return s1
+
 
 def quote_python(inStr):
     s1 = inStr
@@ -142,6 +155,7 @@ def get_all_text_(node):
 class GDSParseError(Exception):
     pass
 
+
 def raise_parse_error(node, msg):
     if XMLParser_import_library == XMLParser_import_lxml:
         msg = '%s (element %s/line %d)' % (msg, node.tag, node.sourceline, )
@@ -165,19 +179,25 @@ class MixedContainer:
     TypeDecimal = 5
     TypeDouble = 6
     TypeBoolean = 7
+
     def __init__(self, category, content_type, name, value):
         self.category = category
         self.content_type = content_type
         self.name = name
         self.value = value
+
     def getCategory(self):
         return self.category
+
     def getContenttype(self, content_type):
         return self.content_type
+
     def getValue(self):
         return self.value
+
     def getName(self):
         return self.name
+
     def export(self, outfile, level, name, namespace):
         if self.category == MixedContainer.CategoryText:
             # Prevent exporting empty content as empty lines.
@@ -185,32 +205,38 @@ class MixedContainer:
                 outfile.write(self.value)
         elif self.category == MixedContainer.CategorySimple:
             self.exportSimple(outfile, level, name)
-        else:    # category == MixedContainer.CategoryComplex
-            self.value.export(outfile, level, namespace,name)
+        else:  # category == MixedContainer.CategoryComplex
+            self.value.export(outfile, level, namespace, name)
+
     def exportSimple(self, outfile, level, name):
         if self.content_type == MixedContainer.TypeString:
             outfile.write(u'<%s>%s</%s>' % (self.name, self.value, self.name))
-        elif self.content_type == MixedContainer.TypeInteger or \
-                self.content_type == MixedContainer.TypeBoolean:
+        elif (self.content_type == MixedContainer.TypeInteger or
+              self.content_type == MixedContainer.TypeBoolean):
             outfile.write(u'<%s>%d</%s>' % (self.name, self.value, self.name))
-        elif self.content_type == MixedContainer.TypeFloat or \
-                self.content_type == MixedContainer.TypeDecimal:
+        elif (self.content_type == MixedContainer.TypeFloat or
+              self.content_type == MixedContainer.TypeDecimal):
             outfile.write(u'<%s>%f</%s>' % (self.name, self.value, self.name))
         elif self.content_type == MixedContainer.TypeDouble:
             outfile.write(u'<%s>%g</%s>' % (self.name, self.value, self.name))
+
     def exportLiteral(self, outfile, level, name):
         if self.category == MixedContainer.CategoryText:
             showIndent(outfile, level)
-            outfile.write(u'model_.MixedContainer(%d, %d, "%s", "%s"),\n' % \
-                (self.category, self.content_type, self.name, self.value))
+            outfile.write(
+                u'model_.MixedContainer(%d, %d, "%s", "%s"),\n' %
+                (self.category, self.content_type, self.name, self.value)
+            )
         elif self.category == MixedContainer.CategorySimple:
             showIndent(outfile, level)
-            outfile.write(u'model_.MixedContainer(%d, %d, "%s", "%s"),\n' % \
-                (self.category, self.content_type, self.name, self.value))
-        else:    # category == MixedContainer.CategoryComplex
+            outfile.write(
+                u'model_.MixedContainer(%d, %d, "%s", "%s"),\n' %
+                (self.category, self.content_type, self.name, self.value)
+            )
+        else:  # category == MixedContainer.CategoryComplex
             showIndent(outfile, level)
-            outfile.write(u'model_.MixedContainer(%d, %d, "%s",\n' % \
-                (self.category, self.content_type, self.name,))
+            outfile.write(u'model_.MixedContainer(%d, %d, "%s",\n' %
+                          (self.category, self.content_type, self.name,))
             self.value.exportLiteral(outfile, level + 1)
             showIndent(outfile, level)
             outfile.write(u')\n')
@@ -221,10 +247,19 @@ class MemberSpec_(object):
         self.name = name
         self.data_type = data_type
         self.container = container
-    def set_name(self, name): self.name = name
-    def get_name(self): return self.name
-    def set_data_type(self, data_type): self.data_type = data_type
-    def get_data_type_chain(self): return self.data_type
+
+    def set_name(self, name):
+        self.name = name
+
+    def get_name(self):
+        return self.name
+
+    def set_data_type(self, data_type):
+        self.data_type = data_type
+
+    def get_data_type_chain(self):
+        return self.data_type
+
     def get_data_type(self):
         if isinstance(self.data_type, list):
             if len(self.data_type) > 0:
@@ -233,8 +268,13 @@ class MemberSpec_(object):
                 return 'xs:string'
         else:
             return self.data_type
-    def set_container(self, container): self.container = container
-    def get_container(self): return self.container
+
+    def set_container(self, container):
+        self.container = container
+
+    def get_container(self):
+        return self.container
+
 
 def _cast(typ, value):
     if typ is None or value is None:
@@ -244,6 +284,7 @@ def _cast(typ, value):
 #
 # Data representation classes.
 #
+
 
 class siteCode(GeneratedsSuper):
     """A &lt;siteCode&gt; is an identifier that this site is referred to
@@ -270,34 +311,66 @@ class siteCode(GeneratedsSuper):
     provide more detail about an agency code"""
     subclass = None
     superclass = None
-    def __init__(self, agencyCode=None, defaultId=None, siteID=None, network=None, agencyName=None, valueOf_=None):
+
+    def __init__(self, agencyCode=None, defaultId=None, siteID=None,
+                 network=None, agencyName=None, valueOf_=None):
         self.agencyCode = _cast(None, agencyCode)
         self.defaultId = _cast(bool, defaultId)
         self.siteID = _cast(None, siteID)
         self.network = _cast(None, network)
         self.agencyName = _cast(None, agencyName)
         self.valueOf_ = valueOf_
+
     def factory(*args_, **kwargs_):
         if siteCode.subclass:
             return siteCode.subclass(*args_, **kwargs_)
         else:
             return siteCode(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_agencyCode(self): return self.agencyCode
-    def set_agencyCode(self, agencyCode): self.agencyCode = agencyCode
-    def get_defaultId(self): return self.defaultId
-    def set_defaultId(self, defaultId): self.defaultId = defaultId
-    def get_siteID(self): return self.siteID
-    def set_siteID(self, siteID): self.siteID = siteID
-    def get_network(self): return self.network
-    def set_network(self, network): self.network = network
-    def get_agencyName(self): return self.agencyName
-    def set_agencyName(self, agencyName): self.agencyName = agencyName
-    def get_valueOf_(self): return self.valueOf_
-    def set_valueOf_(self, valueOf_): self.valueOf_ = valueOf_
-    def export(self, outfile, level, namespace_='', name_='siteCode', namespacedef_=''):
+
+    def get_agencyCode(self):
+        return self.agencyCode
+
+    def set_agencyCode(self, agencyCode):
+        self.agencyCode = agencyCode
+
+    def get_defaultId(self):
+        return self.defaultId
+
+    def set_defaultId(self, defaultId):
+        self.defaultId = defaultId
+
+    def get_siteID(self):
+        return self.siteID
+
+    def set_siteID(self, siteID):
+        self.siteID = siteID
+
+    def get_network(self):
+        return self.network
+
+    def set_network(self, network):
+        self.network = network
+
+    def get_agencyName(self):
+        return self.agencyName
+
+    def set_agencyName(self, agencyName):
+        self.agencyName = agencyName
+
+    def get_valueOf_(self):
+        return self.valueOf_
+
+    def set_valueOf_(self, valueOf_):
+        self.valueOf_ = valueOf_
+
+    def export(self, outfile, level, namespace_='',
+               name_='siteCode', namespacedef_=''):
         showIndent(outfile, level)
-        outfile.write(u'<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
+        outfile.write(
+            u'<%s%s%s' %
+            (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', )
+        )
         self.exportAttributes(outfile, level, [], namespace_, name_='siteCode')
         if self.hasContent_():
             outfile.write(u'>')
@@ -306,29 +379,45 @@ class siteCode(GeneratedsSuper):
             outfile.write(u'</%s%s>\n' % (namespace_, name_))
         else:
             outfile.write(u'/>\n')
-    def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='siteCode'):
-        if self.agencyCode is not None and 'agencyCode' not in already_processed:
+
+    def exportAttributes(self, outfile, level, already_processed,
+                         namespace_='', name_='siteCode'):
+        if self.agencyCode is not None and 'agencyCode' not in already_processed:  # noqa
             already_processed.append('agencyCode')
-            outfile.write(u' agencyCode=%s' % (self.gds_format_string(quote_attrib(self.agencyCode), input_name='agencyCode'), ))
+            outfile.write(
+                u' agencyCode=%s' %
+                (self.gds_format_string(quote_attrib(self.agencyCode), input_name='agencyCode'),)  # noqa
+            )
         if self.defaultId is not None and 'defaultId' not in already_processed:
             already_processed.append('defaultId')
-            outfile.write(u' defaultId="%s"' % self.gds_format_boolean(self.gds_str_lower(str(self.defaultId)), input_name='defaultId'))
+            outfile.write(
+                u' defaultId="%s"' %
+                self.gds_format_boolean(self.gds_str_lower(str(self.defaultId)), input_name='defaultId')  # noqa
+            )
         if self.siteID is not None and 'siteID' not in already_processed:
             already_processed.append('siteID')
-            outfile.write(u' siteID=%s' % (self.gds_format_string(quote_attrib(self.siteID), input_name='siteID'), ))
-        outfile.write(u' network=%s' % (self.gds_format_string(quote_attrib(self.network), input_name='network'), ))
-        if self.agencyName is not None and 'agencyName' not in already_processed:
+            outfile.write(
+                u' siteID=%s' % (self.gds_format_string(quote_attrib(self.siteID), input_name='siteID'), )  # noqa
+            )
+        outfile.write(
+            u' network=%s' % (self.gds_format_string(quote_attrib(self.network), input_name='network'), )  # noqa
+        )
+        if (self.agencyName is not None and
+           'agencyName' not in already_processed):
             already_processed.append('agencyName')
-            outfile.write(u' agencyName=%s' % (self.gds_format_string(quote_attrib(self.agencyName), input_name='agencyName'), ))
+            outfile.write(
+                u' agencyName=%s' % (self.gds_format_string(quote_attrib(self.agencyName), input_name='agencyName'), )  # noqa
+            )
+
     def exportChildren(self, outfile, level, namespace_='', name_='siteCode'):
         pass
+
     def hasContent_(self):
-        if (
-            self.valueOf_
-            ):
+        if self.valueOf_:
             return True
         else:
             return False
+
     def exportLiteral(self, outfile, level, name_='siteCode'):
         level += 1
         self.exportLiteralAttributes(outfile, level, [], name_)
@@ -336,8 +425,10 @@ class siteCode(GeneratedsSuper):
             self.exportLiteralChildren(outfile, level, name_)
         showIndent(outfile, level)
         outfile.write(u'valueOf_ = """%s""",\n' % (self.valueOf_,))
-    def exportLiteralAttributes(self, outfile, level, already_processed, name_):
-        if self.agencyCode is not None and 'agencyCode' not in already_processed:
+
+    def exportLiteralAttributes(self, outfile, level, already_processed, name_):  # noqa
+        if (self.agencyCode is not None and
+           'agencyCode' not in already_processed):
             already_processed.append('agencyCode')
             showIndent(outfile, level)
             outfile.write(u'agencyCode = "%s",\n' % (self.agencyCode,))
@@ -357,14 +448,17 @@ class siteCode(GeneratedsSuper):
             already_processed.append('agencyName')
             showIndent(outfile, level)
             outfile.write(u'agencyName = "%s",\n' % (self.agencyName,))
+
     def exportLiteralChildren(self, outfile, level, name_):
         pass
+
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         self.valueOf_ = get_all_text_(node)
         for child in node:
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, nodeName_)
+
     def buildAttributes(self, node, attrs, already_processed):
         value = attrs.get('agencyCode')
         if value is not None and 'agencyCode' not in already_processed:
@@ -397,8 +491,8 @@ class siteCode(GeneratedsSuper):
 
 
 class geoLocation(GeneratedsSuper):
-    """The geoLocation speficies the details of the geographic location. It
-    contains two portions, a geographic locaiton
+    """The geoLocation specifies the details of the geographic location. It
+    contains two portions, a geographic location
     &amp;lt;geogLocation&amp;gt;, and a local location
     &amp;lt;localSiteXY&amp;gt;. In order to be discovered
     spatially, geogLocation is required. The geogLocation can be of
@@ -420,12 +514,25 @@ class geoLocation(GeneratedsSuper):
         else:
             return geoLocation(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_geogLocation(self): return self.geogLocation
-    def set_geogLocation(self, geogLocation): self.geogLocation = geogLocation
-    def get_localSiteXY(self): return self.localSiteXY
-    def set_localSiteXY(self, localSiteXY): self.localSiteXY = localSiteXY
-    def add_localSiteXY(self, value): self.localSiteXY.append(value)
-    def insert_localSiteXY(self, index, value): self.localSiteXY[index] = value
+
+    def get_geogLocation(self):
+        return self.geogLocation
+
+    def set_geogLocation(self, geogLocation):
+        self.geogLocation = geogLocation
+
+    def get_localSiteXY(self):
+        return self.localSiteXY
+
+    def set_localSiteXY(self, localSiteXY):
+        self.localSiteXY = localSiteXY
+
+    def add_localSiteXY(self, value):
+        self.localSiteXY.append(value)
+
+    def insert_localSiteXY(self, index, value):
+        self.localSiteXY[index] = value
+
     def export(self, outfile, level, namespace_='', name_='geoLocation', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write(u'<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -437,28 +544,32 @@ class geoLocation(GeneratedsSuper):
             outfile.write(u'</%s%s>\n' % (namespace_, name_))
         else:
             outfile.write(u'/>\n')
+
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='geoLocation'):
         pass
+
     def exportChildren(self, outfile, level, namespace_='', name_='geoLocation'):
         if self.geogLocation:
             self.geogLocation.export(outfile, level, namespace_, name_='geogLocation', )
         for localSiteXY_ in self.localSiteXY:
             localSiteXY_.export(outfile, level, namespace_, name_='localSiteXY')
+
     def hasContent_(self):
-        if (
-            self.geogLocation is not None or
-            self.localSiteXY
-            ):
+        if (self.geogLocation is not None or
+            self.localSiteXY):
             return True
         else:
             return False
+
     def exportLiteral(self, outfile, level, name_='geoLocation'):
         level += 1
         self.exportLiteralAttributes(outfile, level, [], name_)
         if self.hasContent_():
             self.exportLiteralChildren(outfile, level, name_)
+
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
+
     def exportLiteralChildren(self, outfile, level, name_):
         if self.geogLocation is not None:
             showIndent(outfile, level)
@@ -478,13 +589,16 @@ class geoLocation(GeneratedsSuper):
         level -= 1
         showIndent(outfile, level)
         outfile.write(u'],\n')
+
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, nodeName_)
+
     def buildAttributes(self, node, attrs, already_processed):
         pass
+
     def buildChildren(self, child_, nodeName_, from_subclass=False):
         if nodeName_ == 'geogLocation':
             obj_ = GeogLocationType.factory()
@@ -505,6 +619,7 @@ class localSiteXY(GeneratedsSuper):
     use the PROJ4 projection string standard"""
     subclass = None
     superclass = None
+
     def __init__(self, projectionInformation=None, X=None, Y=None, Z=None, note=None):
         self.projectionInformation = _cast(None, projectionInformation)
         self.X = X
@@ -514,24 +629,50 @@ class localSiteXY(GeneratedsSuper):
             self.note = []
         else:
             self.note = note
+
     def factory(*args_, **kwargs_):
         if localSiteXY.subclass:
             return localSiteXY.subclass(*args_, **kwargs_)
         else:
             return localSiteXY(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_X(self): return self.X
-    def set_X(self, X): self.X = X
-    def get_Y(self): return self.Y
-    def set_Y(self, Y): self.Y = Y
-    def get_Z(self): return self.Z
-    def set_Z(self, Z): self.Z = Z
-    def get_note(self): return self.note
-    def set_note(self, note): self.note = note
-    def add_note(self, value): self.note.append(value)
-    def insert_note(self, index, value): self.note[index] = value
-    def get_projectionInformation(self): return self.projectionInformation
-    def set_projectionInformation(self, projectionInformation): self.projectionInformation = projectionInformation
+
+    def get_X(self):
+        return self.X
+
+    def set_X(self, X):
+        self.X = X
+
+    def get_Y(self):
+        return self.Y
+
+    def set_Y(self, Y):
+        self.Y = Y
+
+    def get_Z(self):
+        return self.Z
+
+    def set_Z(self, Z):
+        self.Z = Z
+
+    def get_note(self):
+        return self.note
+
+    def set_note(self, note):
+        self.note = note
+
+    def add_note(self, value):
+        self.note.append(value)
+
+    def insert_note(self, index, value):
+        self.note[index] = value
+
+    def get_projectionInformation(self):
+        return self.projectionInformation
+
+    def set_projectionInformation(self, projectionInformation):
+        self.projectionInformation = projectionInformation
+
     def export(self, outfile, level, namespace_='', name_='localSiteXY', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write(u'<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -543,10 +684,12 @@ class localSiteXY(GeneratedsSuper):
             outfile.write(u'</%s%s>\n' % (namespace_, name_))
         else:
             outfile.write(u'/>\n')
+
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='localSiteXY'):
         if self.projectionInformation is not None and 'projectionInformation' not in already_processed:
             already_processed.append('projectionInformation')
             outfile.write(u' projectionInformation=%s' % (self.gds_format_string(quote_attrib(self.projectionInformation), input_name='projectionInformation'), ))
+
     def exportChildren(self, outfile, level, namespace_='', name_='localSiteXY'):
         if self.X is not None:
             showIndent(outfile, level)
@@ -559,26 +702,28 @@ class localSiteXY(GeneratedsSuper):
             outfile.write(u'<%sZ>%s</%sZ>\n' % (namespace_, self.gds_format_string(quote_xml(self.Z), input_name='Z'), namespace_))
         for note_ in self.note:
             note_.export(outfile, level, namespace_, name_='note')
+
     def hasContent_(self):
-        if (
-            self.X is not None or
+        if (self.X is not None or
             self.Y is not None or
             self.Z is not None or
-            self.note
-            ):
+            self.note):
             return True
         else:
             return False
+
     def exportLiteral(self, outfile, level, name_='localSiteXY'):
         level += 1
         self.exportLiteralAttributes(outfile, level, [], name_)
         if self.hasContent_():
             self.exportLiteralChildren(outfile, level, name_)
+
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         if self.projectionInformation is not None and 'projectionInformation' not in already_processed:
             already_processed.append('projectionInformation')
             showIndent(outfile, level)
             outfile.write(u'projectionInformation = "%s",\n' % (self.projectionInformation,))
+
     def exportLiteralChildren(self, outfile, level, name_):
         if self.X is not None:
             showIndent(outfile, level)
@@ -601,16 +746,19 @@ class localSiteXY(GeneratedsSuper):
         level -= 1
         showIndent(outfile, level)
         outfile.write(u'],\n')
+
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, nodeName_)
+
     def buildAttributes(self, node, attrs, already_processed):
         value = attrs.get('projectionInformation')
         if value is not None and 'projectionInformation' not in already_processed:
             already_processed.append('projectionInformation')
             self.projectionInformation = value
+
     def buildChildren(self, child_, nodeName_, from_subclass=False):
         if nodeName_ == 'X':
             X_ = child_.text
@@ -642,6 +790,7 @@ class TsValuesSingleVariableType(GeneratedsSuper):
     transformed the data from the original units."""
     subclass = None
     superclass = None
+
     def __init__(self, count=None, unitsAbbreviation=None, unitsType=None, timeZoneShiftApplied=None, unitsAreConverted=False, unitsCode=None, value=None, qualifier=None, qualityControlLevel=None, method=None, source=None, offset=None):
         self.count = _cast(int, count)
         self.unitsAbbreviation = _cast(None, unitsAbbreviation)
@@ -673,51 +822,90 @@ class TsValuesSingleVariableType(GeneratedsSuper):
             self.offset = []
         else:
             self.offset = offset
+
     def factory(*args_, **kwargs_):
         if TsValuesSingleVariableType.subclass:
             return TsValuesSingleVariableType.subclass(*args_, **kwargs_)
         else:
             return TsValuesSingleVariableType(*args_, **kwargs_)
     factory = staticmethod(factory)
+
     def get_value(self): return self.value
+
     def set_value(self, value): self.value = value
+
     def add_value(self, value): self.value.append(value)
+
     def insert_value(self, index, value): self.value[index] = value
+
     def get_qualifier(self): return self.qualifier
+
     def set_qualifier(self, qualifier): self.qualifier = qualifier
+
     def add_qualifier(self, value): self.qualifier.append(value)
+
     def insert_qualifier(self, index, value): self.qualifier[index] = value
+
     def get_qualityControlLevel(self): return self.qualityControlLevel
+
     def set_qualityControlLevel(self, qualityControlLevel): self.qualityControlLevel = qualityControlLevel
+
     def add_qualityControlLevel(self, value): self.qualityControlLevel.append(value)
+
     def insert_qualityControlLevel(self, index, value): self.qualityControlLevel[index] = value
+
     def get_method(self): return self.method
+
     def set_method(self, method): self.method = method
+
     def add_method(self, value): self.method.append(value)
+
     def insert_method(self, index, value): self.method[index] = value
+
     def get_source(self): return self.source
+
     def set_source(self, source): self.source = source
+
     def add_source(self, value): self.source.append(value)
+
     def insert_source(self, index, value): self.source[index] = value
+
     def get_offset(self): return self.offset
+
     def set_offset(self, offset): self.offset = offset
+
     def add_offset(self, value): self.offset.append(value)
+
     def insert_offset(self, index, value): self.offset[index] = value
+
     def get_count(self): return self.count
+
     def set_count(self, count): self.count = count
+
     def get_unitsAbbreviation(self): return self.unitsAbbreviation
+
     def set_unitsAbbreviation(self, unitsAbbreviation): self.unitsAbbreviation = unitsAbbreviation
+
     def get_unitsType(self): return self.unitsType
+
     def set_unitsType(self, unitsType): self.unitsType = unitsType
+
     def validate_UnitsTypeEnum(self, value):
         # Validate type UnitsTypeEnum, a restriction on xsi:string.
         pass
+
     def get_timeZoneShiftApplied(self): return self.timeZoneShiftApplied
+
     def set_timeZoneShiftApplied(self, timeZoneShiftApplied): self.timeZoneShiftApplied = timeZoneShiftApplied
+
     def get_unitsAreConverted(self): return self.unitsAreConverted
+
     def set_unitsAreConverted(self, unitsAreConverted): self.unitsAreConverted = unitsAreConverted
+
     def get_unitsCode(self): return self.unitsCode
+
     def set_unitsCode(self, unitsCode): self.unitsCode = unitsCode
+
     def export(self, outfile, level, namespace_='', name_='TsValuesSingleVariableType', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write(u'<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -729,6 +917,7 @@ class TsValuesSingleVariableType(GeneratedsSuper):
             outfile.write(u'</%s%s>\n' % (namespace_, name_))
         else:
             outfile.write(u'/>\n')
+
     def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='TsValuesSingleVariableType'):
         if self.count is not None and 'count' not in already_processed:
             already_processed.append('count')
@@ -748,6 +937,7 @@ class TsValuesSingleVariableType(GeneratedsSuper):
         if self.unitsCode is not None and 'unitsCode' not in already_processed:
             already_processed.append('unitsCode')
             outfile.write(u' unitsCode=%s' % (self.gds_format_string(quote_attrib(self.unitsCode), input_name='unitsCode'), ))
+
     def exportChildren(self, outfile, level, namespace_='', name_='TsValuesSingleVariableType'):
         for value_ in self.value:
             value_.export(outfile, level, namespace_, name_='value')
@@ -761,23 +951,24 @@ class TsValuesSingleVariableType(GeneratedsSuper):
             source_.export(outfile, level, namespace_, name_='source')
         for offset_ in self.offset:
             offset_.export(outfile, level, namespace_, name_='offset')
+
     def hasContent_(self):
-        if (
-            self.value or
+        if (self.value or
             self.qualifier or
             self.qualityControlLevel or
             self.method or
             self.source or
-            self.offset
-            ):
+            self.offset):
             return True
         else:
             return False
+
     def exportLiteral(self, outfile, level, name_='TsValuesSingleVariableType'):
         level += 1
         self.exportLiteralAttributes(outfile, level, [], name_)
         if self.hasContent_():
             self.exportLiteralChildren(outfile, level, name_)
+
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         if self.count is not None and 'count' not in already_processed:
             already_processed.append('count')
@@ -803,6 +994,7 @@ class TsValuesSingleVariableType(GeneratedsSuper):
             already_processed.append('unitsCode')
             showIndent(outfile, level)
             outfile.write(u'unitsCode = "%s",\n' % (self.unitsCode,))
+
     def exportLiteralChildren(self, outfile, level, name_):
         showIndent(outfile, level)
         outfile.write(u'value=[\n')
@@ -876,11 +1068,13 @@ class TsValuesSingleVariableType(GeneratedsSuper):
         level -= 1
         showIndent(outfile, level)
         outfile.write(u'],\n')
+
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, nodeName_)
+
     def buildAttributes(self, node, attrs, already_processed):
         value = attrs.get('count')
         if value is not None and 'count' not in already_processed:
@@ -922,6 +1116,7 @@ class TsValuesSingleVariableType(GeneratedsSuper):
             already_processed.append('unitsCode')
             self.unitsCode = value
             self.unitsCode = ' '.join(self.unitsCode.split())
+
     def buildChildren(self, child_, nodeName_, from_subclass=False):
         if nodeName_ == 'value':
             obj_ = ValueSingleVariable.factory()
@@ -6846,8 +7041,6 @@ class SiteInfoType(SourceInfoType):
             self.altname = altname_
         super(SiteInfoType, self).buildChildren(child_, nodeName_, True)
 # end class SiteInfoType
-
-
 
 
 def get_root_tag(node):
