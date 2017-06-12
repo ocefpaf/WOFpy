@@ -32,7 +32,28 @@ The AWS Ubuntu Server is running [Systemd init](http://www.freedesktop.org/wiki/
 
 ## Table of Contents
 
-[toc]
+<!-- MarkdownTOC depth=3 autolink="true" bracket="round" -->
+
+- [Install Databases](#install-databases)
+    - [Installing the LBR ODM2 MySQL test database](#installing-the-lbr-odm2-mysql-test-database)
+    - [Downloading the LBR ODM2 SQLite test database](#downloading-the-lbr-odm2-sqlite-test-database)
+- [Install WOFpy](#install-wofpy)
+- [Installing NGINX](#installing-nginx)
+- [Development WOFpy](#development-wofpy)
+    - [Get Configuration Folder](#get-configuration-folder)
+    - [Edit Configuration `.cfg` files](#edit-configuration-cfg-files)
+    - [Test `.cfg` files](#test-cfg-files)
+    - [Set up runserver script](#set-up-runserver-script)
+        - [Single Server](#single-server)
+        - [Multi Server](#multi-server)
+- [Production WOFpy](#production-wofpy)
+    - [Get Configuration Folder](#get-configuration-folder-1)
+    - [Setup `wsgi.py`](#setup-wsgipy)
+    - [Setup upstart script](#setup-upstart-script)
+    - [Setup NGINX](#setup-nginx)
+- [Checking Live instance of WOFpy](#checking-live-instance-of-wofpy)
+
+<!-- /MarkdownTOC -->
 
 ------------------
 ## Install Databases
