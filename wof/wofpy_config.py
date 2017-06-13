@@ -30,9 +30,9 @@ Arguments:
 Options:
   -h --help               Show this screen.
   -v --version            Show version.
-  -m --mode=development   Deploympent mode [default: development].
+  -m --mode=development   Deployment mode [default: development].
   -o --overwrite=soft     Overwrite everything *hard*,
-                          or adds extra files to an exsting directory *soft* [default: soft].
+                          or adds extra files to an existing directory *soft* [default: soft].
 """
 
 _ROOT = os.path.abspath(os.path.dirname(wof.__file__))
