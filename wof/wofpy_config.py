@@ -45,6 +45,7 @@ def makedirs(directory, overwrite='soft'):
         os.makedirs(directory)
     elif os.path.exists(directory) and overwrite in ['soft', 'hard']:
         if overwrite == 'hard':
+            print('Overwriting directory {}'.format(directory))
             shutil.rmtree(directory)
             os.makedirs(directory)
     else:
@@ -58,6 +59,9 @@ def copytree(src, dst, symlinks=False, ignore=None, overwrite='soft'):
             continue
         s = os.path.join(src, item)
         d = os.path.join(dst, item)
+        if overwrite == 'soft' and not os.path.exists(d):
+            print('Adding {}'.format(d))
+
         if os.path.exists(d) and overwrite == 'soft':
             continue
         if os.path.isdir(s):
@@ -79,10 +83,6 @@ def main():
         raise ValueError(
             'Got overwrite: {!r}, expected hard or soft.'.format(overwrite)
             )
-    elif overwrite == 'hard':
-        print('Overwriting directory {}.'.format(directory))
-    elif overwrite == 'soft':
-        print('Adding files to directory {}.'.format(directory))
 
     makedirs(directory, overwrite)
     _TEST = os.path.join(directory, 'odm2', 'timeseries')
