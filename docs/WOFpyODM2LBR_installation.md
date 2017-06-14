@@ -1,9 +1,3 @@
-# ----- THIS IS A DRAFT! DO NOT USE YET, UNTIL THIS WARNING HAS BEEN REMOVED! -----
-- 5/19/2017: We plan to finalize the document by 5/25/2017 or so.
-- 6/12/2017: Next edits includes single server setup.
-
------------------------
-
 ## Installing WOFpy (Single or Multi)
 
 **In this example, `Little Bear River MySQL` and `SQLite ODM2` were used.**
