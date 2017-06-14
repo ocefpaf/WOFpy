@@ -10,6 +10,8 @@ matrix:
   - python: 3.6
     env: TEST_TARGET=default
   - python: 2.7
+    env: TEST_TARGET=cli
+  - python: 2.7
     env: TEST_TARGET=coding_standards
   allow_failures:
   - python: 3.6
@@ -44,6 +46,14 @@ before_script:
 script:
   - if [[ $TEST_TARGET == 'default' ]]; then
       py.test -s -rxs -v ;
+    fi
+
+  - if [[ $TEST_TARGET == 'cli' ]]; then
+      pushd /tmp ;
+      wofpy_config wofpyserver ;
+      wofpy_config wofpyserver --mode=production --overwrite=soft ;
+      wofpy_config wofpyserver -m production -o hard ;
+      popd ;
     fi
 
   - if [[ $TEST_TARGET == 'coding_standards' ]]; then
