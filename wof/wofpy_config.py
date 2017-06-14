@@ -40,17 +40,13 @@ _CONFIG = os.path.join(_ROOT, 'examples', 'production_configs')
 _ODM2_TIMESERIES = os.path.join(_ROOT, 'examples', 'flask', 'odm2', 'timeseries')
 
 
-def makedirs(directory, overwrite='soft'):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    elif os.path.exists(directory) and overwrite in ['soft', 'hard']:
-        if overwrite == 'hard':
-            print('Overwriting directory {}'.format(directory))
-            shutil.rmtree(directory)
-            os.makedirs(directory)
-    else:
-        msg = 'Directory {} already exists.'.format
-        raise ValueError(msg(directory))
+def makedirs(directory, overwrite=None):
+    if os.path.exists(directory) and overwrite == 'soft':
+        return
+    elif os.path.exists(directory) and overwrite == 'hard':
+        print('Overwriting directory {}'.format(directory))
+        shutil.rmtree(directory)
+    os.makedirs(directory)
 
 
 def copytree(src, dst, symlinks=False, ignore=None, overwrite='soft'):

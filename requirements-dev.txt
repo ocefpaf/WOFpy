@@ -7,3 +7,6 @@ suds-jurko
 uwsgi
 # unavailable at PyPI
 geoalchemy-odm2
+# testing
+pytest
+pycodestyle
