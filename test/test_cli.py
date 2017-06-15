@@ -1,9 +1,10 @@
 import os
-import pytest
+import shutil
+import sys
 
 import tempfile
 
-import shutil
+import pytest
 
 from wof.wofpy_config import makedirs
 
@@ -22,6 +23,8 @@ def test_makedirs_do_not_overwrite():
         makedirs(_directory)
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason='st_ino does not work on Windows')
 def test_makedirs_overwrite_soft():
     _directory, _stat = mkdtemp().next()
     makedirs(_directory, overwrite='soft')
@@ -29,6 +32,8 @@ def test_makedirs_overwrite_soft():
     assert _stat.st_ino == stat.st_ino
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason='st_ino does not work on Windows')
 def test_makedirs_overwrite_hard():
     _directory, _stat = mkdtemp().next()
     makedirs(_directory, overwrite='hard')
