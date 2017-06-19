@@ -72,4 +72,5 @@ setup(
         'wofpy_config = wof.wofpy_config:main'
         ]
     ),
+    cmdclass=versioneer.get_cmdclass(),
 )
