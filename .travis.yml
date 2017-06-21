@@ -10,6 +10,8 @@ matrix:
   - python: 3.6
     env: TEST_TARGET=default
   - python: 2.7
+    env: TEST_TARGET=cli
+  - python: 2.7
     env: TEST_TARGET=coding_standards
   allow_failures:
   - python: 3.6
@@ -29,9 +31,8 @@ before_install:
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       conda install --yes configparser ;
     fi
-  # Coding standards and tests.
-  - conda install --yes pytest
-  - conda install --channel conda-forge --yes pycodestyle flake8-print flake8-quotes flake8-import-order flake8-builtins flake8-comprehensions flake8-mutable flake8-docstrings
+  # Coding standards.
+  - conda install --channel conda-forge --yes flake8-print flake8-quotes flake8-import-order flake8-builtins flake8-comprehensions flake8-mutable
 
 # Test source distribution.
 install:
@@ -44,6 +45,14 @@ before_script:
 script:
   - if [[ $TEST_TARGET == 'default' ]]; then
       py.test -s -rxs -v ;
+    fi
+
+  - if [[ $TEST_TARGET == 'cli' ]]; then
+      pushd /tmp ;
+      wofpy_config wofpyserver ;
+      wofpy_config wofpyserver --mode=production --overwrite=soft ;
+      wofpy_config wofpyserver -m production -o hard ;
+      popd ;
     fi
 
   - if [[ $TEST_TARGET == 'coding_standards' ]]; then
