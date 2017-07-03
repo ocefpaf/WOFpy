@@ -13,7 +13,7 @@ Deployment of WOFpy was done in an Ubuntu Server version 16.04. WOFpy is served 
 
 ### [Amazon Web Services (AWS)](https://aws.amazon.com/) 
 
-Note that this installation is currently (2017-3-1) [live on the cloud](http://52.40.105.124:8080/odm2timeseries/). It will be kept live only during active testing, and will be taken down without prior notice when active testing is over. It will be reactivated in the future as needed.
+Note that this installation is currently (2017-7-3) [live on the cloud](http://54.186.36.247:8080/mysqlodm2timeseries/). It will be kept live only during active testing, and will be taken down without prior notice when active testing is over. It will be reactivated in the future as needed.
 
 Specifications:
 - Ubuntu 16.04
@@ -152,13 +152,13 @@ wofpyserverdev
 1. Make a copy of `odm2_config_timeseries.cfg` in the newly created `wofpy` folder, so that we can have separate config file for `MySQL` and `SQLite`.
 
     ```bash
-    cp wofpyserverdev/odm2_config_timeseries.cfg wofpyserverdev/odm2_config_mysql.cfg
+    cp wofpyserverdev/odm2/timeseries/odm2_config_timeseries.cfg wofpyserverdev/odm2/timeseries/odm2_config_mysql.cfg
     ```
     
 2. Rename `odm2_config_timeseries.cfg` to make things clear that this is sqlite configuration by default.
 
     ```bash
-    mv wofpyserverdev/odm2_config_timeseries.cfg wofpyserverdev/odm2_config_sqlite.cfg
+    cp wofpyserverdev/odm2/timeseries/odm2_config_timeseries.cfg wofpyserverdev/odm2/timeseries/odm2_config_sqlite.cfg
     ```
     
 3. Edit each `.cfg` file to reflect the correct settings. Example below is for `MySQL` database
