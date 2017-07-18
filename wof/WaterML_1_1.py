@@ -1269,7 +1269,7 @@ class option(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='option')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='option', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -2147,8 +2147,8 @@ class LatLonPointType(GeogLocationType):
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='LatLonPointType')
-        outfile.write(u' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
-        outfile.write(u' xsi:type="LatLonPointType"')
+        outfile.write(' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
+        outfile.write(' xsi:type="LatLonPointType"')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='LatLonPointType', pretty_print=pretty_print)
@@ -2976,7 +2976,7 @@ class NoteType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='NoteType')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='NoteType', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -3144,7 +3144,7 @@ class ValueSingleVariable(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='ValueSingleVariable')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='ValueSingleVariable', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -4884,7 +4884,7 @@ class PropertyType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='PropertyType')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='PropertyType', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -4986,7 +4986,7 @@ class siteCodeType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='siteCodeType')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='siteCodeType', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -5528,7 +5528,7 @@ class variableCodeType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='variableCodeType')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='variableCodeType', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -5721,7 +5721,7 @@ class parentCodeType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='parentCodeType')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='parentCodeType', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -5814,7 +5814,7 @@ class relatedCodeType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='relatedCodeType')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='relatedCodeType', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -6845,7 +6845,7 @@ class valueCountType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='valueCountType')
         if self.hasContent_():
             outfile.write('>')
-            outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+            outfile.write(self.valueOf_.encode(ExternalEncoding))
             self.exportChildren(outfile, level + 1, namespace_='', name_='valueCountType', pretty_print=pretty_print)
             outfile.write('</%s%s>%s' % (namespace_, name_, eol_))
         else:
@@ -7325,8 +7325,8 @@ class SiteInfoType(SourceInfoType):
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
         already_processed = set()
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='SiteInfoType')
-        outfile.write(u' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
-        outfile.write(u' xsi:type="SiteInfoType"')
+        outfile.write(' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"')
+        outfile.write(' xsi:type="SiteInfoType"')
         if self.hasContent_():
             outfile.write('>%s' % (eol_, ))
             self.exportChildren(outfile, level + 1, namespace_='', name_='SiteInfoType', pretty_print=pretty_print)
