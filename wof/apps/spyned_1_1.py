@@ -1,6 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 
-import StringIO
+import io
 import logging
 
 from lxml import etree
@@ -35,7 +35,7 @@ def TWOFService(wof_inst, T, T_name):
                 logging.debug(site)
                 logging.debug(siteArg)
                 siteResponse = wof_inst.create_get_site_response(siteArg)
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 siteResponse.export(outStream, 0, name_="sitesResponse",
                                     namespacedef_=NSDEF)
                 return outStream.getvalue()
@@ -60,7 +60,7 @@ def TWOFService(wof_inst, T, T_name):
                 siteResponse = wof_inst.create_get_site_box_response(
                     west, south, east, north, IncludeSeries
                 )
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 siteResponse.export(outStream, 0, name_="sitesResponse",
                                     namespacedef_=NSDEF)
                 return outStream.getvalue()
@@ -84,7 +84,7 @@ def TWOFService(wof_inst, T, T_name):
         def GetSiteInfoObject(ctx, site, authToken=None):
             try:
                 siteInfoResponse = wof_inst.create_get_site_info_response(site)
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 siteInfoResponse.export(
                     outStream, 0, name_="sitesResponse", namespacedef_=NSDEF
                 )
@@ -111,7 +111,7 @@ def TWOFService(wof_inst, T, T_name):
             try:
                 siteInfoResponse = \
                     wof_inst.create_get_site_info_multiple_response(siteArg)
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 siteInfoResponse.export(
                     outStream, 0, name_="sitesResponse", namespacedef_=NSDEF
                 )
@@ -134,7 +134,7 @@ def TWOFService(wof_inst, T, T_name):
             try:
                 variableInfoResponse = \
                     wof_inst.create_get_variable_info_response(variable)
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 variableInfoResponse.export(outStream, 0,
                                             name_="variablesResponse",
                                             namespacedef_=NSDEF)
@@ -156,7 +156,7 @@ def TWOFService(wof_inst, T, T_name):
         def GetVariablesObject(ctx, authToken=None):
             try:
                 variableInfoResponse = wof_inst.create_get_variable_info_response()  # noqa
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 variableInfoResponse.export(outStream, 0,
                                             name_="variablesResponse",
                                             namespacedef_=NSDEF)
@@ -179,7 +179,7 @@ def TWOFService(wof_inst, T, T_name):
             try:
                 timeSeriesResponse = wof_inst.create_get_values_response(
                         location, variable, startDate, endDate)
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 timeSeriesResponse.export(
                     outStream, 0, name_="timeSeriesResponse",
                     namespacedef_=NSDEF)
@@ -209,7 +209,7 @@ def TWOFService(wof_inst, T, T_name):
             try:
                 timeSeriesResponse = wof_inst.create_get_values_site_response(
                         site, startDate, endDate)
-                outStream = StringIO.StringIO()
+                outStream = io.BytesIO()
                 timeSeriesResponse.export(
                     outStream, 0, name_="timeSeriesResponse",
                     namespacedef_=NSDEF)
