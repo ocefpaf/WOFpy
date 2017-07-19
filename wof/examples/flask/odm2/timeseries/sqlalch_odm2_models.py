@@ -10,7 +10,7 @@ from wof import models as wof_base
 class Variable(wof_base.BaseVariable):
     """WOF Variable Model."""
     def __init__(self, v=None, VarSampleMedium=None,
-                 v_unit=None, v_tunit=None, v_timeinterval=None):
+                 v_unit=None, v_tunit=None, v_timeinterval=None, aggregationstatisticCV=None):
         """Initialize WOF Variable Object.
 
         :param v: ODM2 Variable Object
@@ -25,9 +25,10 @@ class Variable(wof_base.BaseVariable):
         self.VariableDescription = v.VariableDefinition
         self.NoDataValue = v.NoDataValue
         self.SampleMedium = VarSampleMedium
-        self.DataType = v.VariableTypeCV
+        self.DataType = aggregationstatisticCV
         self.Speciation = v.SpeciationCV
         self.VariableUnitsID = v_unit.UnitsID
+        self.GeneralCategory = v.VariableTypeCV
 
         if v_unit is not None:
             self.VariableUnits = Unit(v_unit)
@@ -45,7 +46,6 @@ class Variable(wof_base.BaseVariable):
     # TimeSupport = Column(Float)
     # TimeUnitsID = Column(Integer, ForeignKey('Units.UnitsID'))
     # DataType = Column(String)
-    # GeneralCategory = wof_base.GeneralCategoryTypes.WATER_QUALITY
 
     # VariableUnits = relationship("Units",
     #                    primaryjoin='Variable.VariableUnitsID==Units.UnitsID')

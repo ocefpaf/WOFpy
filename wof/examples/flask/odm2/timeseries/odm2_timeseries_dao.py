@@ -165,7 +165,8 @@ class Odm2Dao(BaseDao):
                     s = result.ResultObj.SampledMediumCV
                     t = result.TimeAggregationIntervalUnitsObj
                     ti = result.TimeAggregationInterval
-                    w_v = model.Variable(v, s, u, t, ti)
+                    ag = result.ResultObj.AggregationStatisticCV
+                    w_v = model.Variable(v, s, u, t, ti, ag)
                     v_arr.append(w_v)
 
         return v_arr
