@@ -209,7 +209,7 @@ def check_censorCode(censorCode):
         return default
 
 
-def check_QualityControlLevel(self, QualityControlLevel):
+def check_QualityControlLevel(QualityControlLevel):
     default = "Unknown"
     valueList = [
         "Raw data",
