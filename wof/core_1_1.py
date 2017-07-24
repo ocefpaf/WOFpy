@@ -8,6 +8,7 @@ import dateutil.parser
 
 from wof import WaterML_1_1 as WaterML
 from wof import core
+from wof import utils
 
 
 class WOF_1_1(object):
@@ -637,7 +638,7 @@ class WOF_1_1(object):
         if not hasattr(valueResult, 'SourceCode'):
             setattr(valueResult, 'SourceCode', None)
 
-        clean_censorCode = self.check_censorCode(valueResult.CensorCode)
+        clean_censorCode = utils.check_censorCode(valueResult.CensorCode)
         # clean_qcl = self.check_QualityControlLevel(valueResult.QualityControlLevel)  # noqa
 
         value = WaterML.ValueSingleVariable(
@@ -825,10 +826,10 @@ class WOF_1_1(object):
         return series
 
     def create_variable_element(self, variableResult):
-        clean_datatype = self.check_dataTypeEnum(variableResult.DataType)
-        clean_medium = self.check_SampleMedium(variableResult.SampleMedium)
-        clean_category = self.check_generalCategory(variableResult.GeneralCategory)  # noqa
-        clean_valuetype = self.check_valueType(variableResult.ValueType)
+        clean_datatype = utils.check_dataTypeEnum(variableResult.DataType)
+        clean_medium = utils.check_SampleMedium(variableResult.SampleMedium)
+        clean_category = utils.check_generalCategory(variableResult.GeneralCategory)  # noqa
+        clean_valuetype = utils.check_valueType(variableResult.ValueType)
         variable = WaterML.VariableInfoType(
             variableName=variableResult.VariableName,
             valueType=clean_valuetype,
@@ -853,7 +854,7 @@ class WOF_1_1(object):
         variableCode.valueOf_ = v_code
 
         variable.add_variableCode(variableCode)
-        clean_variableUnits = self.check_UnitsType(variableResult.VariableUnits.UnitsType)  # noqa
+        clean_variableUnits = utils.check_UnitsType(variableResult.VariableUnits.UnitsType)  # noqa
 
         if variableResult.VariableUnits:
             units = WaterML.UnitsType(
@@ -897,160 +898,3 @@ class WOF_1_1(object):
             endDateTime
         )
         return valueResultArr
-
-    def check_dataTypeEnum(self, datatype):
-        default = "Unknown"
-        valueList = [
-            "Continuous",
-            "Instantaneous",
-            "Cumulative",
-            "Incremental",
-            "Average",
-            "Maximum",
-            "Minimum",
-            "Constant Over Interval",
-            "Categorical",
-            "Best Easy Systematic Estimator ",
-            "Unknown",
-            "Variance",
-            "Median",
-            "Mode",
-            "Best Easy Systematic Estimator",
-            "Standard Deviation",
-            "Skewness",
-            "Equivalent Mean",
-            "Sporadic",
-            "Unknown",
-        ]
-        if datatype is None:
-            logging.warn('Datatype is not specified')
-            return default
-        if (datatype in valueList):
-            return datatype
-        else:
-            logging.warn('value outside of enum for datatype ' + datatype)
-            return default
-
-    def check_UnitsType(self, UnitsType):
-        default = "Dimensionless"
-        valueList = [
-            "Angle",
-            "Area",
-            "Dimensionless",
-            "Energy",
-            "Energy Flux",
-            "Flow",
-            "Force",
-            "Frequency",
-            "Length",
-            "Light",
-            "Mass",
-            "Permeability",
-            "Power",
-            "Pressure/Stress",
-            "Resolution",
-            "Scale",
-            "Temperature",
-            "Time",
-            "Velocity",
-            "Volume",
-        ]
-        if UnitsType is None:
-            logging.warn('UnitsType is not specified ')
-            return default
-        if (UnitsType in valueList):
-            return UnitsType
-        else:
-            logging.warn('value outside of enum for UnitsType ' + UnitsType)
-            return default
-
-    def check_SampleMedium(self, SampleMedium):
-        default = "Unknown"
-        valueList = [
-            "Surface Water",
-            "Ground Water",
-            "Sediment",
-            "Soil",
-            "Air",
-            "Tissue",
-            "Precipitation",
-            "Unknown",
-            "Other",
-            "Snow",
-            "Not Relevant",
-        ]
-        if SampleMedium is None:
-            logging.warn('SampleMedium is not specified')
-            return default
-        if (SampleMedium in valueList):
-            return SampleMedium
-        else:
-            logging.warn('default returned: value outside of enum for SampleMedium ' + SampleMedium)  # noqa
-            return default
-
-    def check_generalCategory(self, generalCategory):
-        default = "Unknown"
-        valueList = [
-            "Water Quality",
-            "Climate",
-            "Hydrology",
-            "Geology",
-            "Biota",
-            "Unknown",
-            "Instrumentation",
-        ]
-        if generalCategory is None:
-            logging.warn('GeneralCategory is not specified')
-            return default
-        if (generalCategory in valueList):
-            return generalCategory
-        else:
-            logging.warn('default returned: value outside of enum for generalCategory ' + generalCategory)  # noqa
-            return default
-
-    def check_valueType(self, valueType):
-        default = "Unknown"
-        valueList = [
-            "Field Observation",
-            "Sample",
-            "Model Simulation Result",
-            "Derived Value",
-            "Unknown",
-        ]
-        if valueType is None:
-            logging.warn('ValueType is not specified')
-            return default
-        if (valueType in valueList):
-            return valueType
-        else:
-            logging.warn('default returned: value outside of enum for valueType ' + valueType)  # noqa
-            return default
-
-    def check_censorCode(self, censorCode):
-        default = "nc"
-        valueList = [
-            "lt",
-            "gt",
-            "nc",
-            "nd",
-            "pnq",
-        ]
-        if (censorCode in valueList):
-            return censorCode
-        else:
-            return default
-
-    def check_QualityControlLevel(self, QualityControlLevel):
-        default = "Unknown"
-        valueList = [
-            "Raw data",
-            "Quality controlled data",
-            "Derived products",
-            "Interpreted products",
-            "Knowledge products",
-            "Unknown",
-        ]
-        if (QualityControlLevel in valueList):
-            return QualityControlLevel
-        else:
-            return default
