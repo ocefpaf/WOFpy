@@ -402,7 +402,7 @@ def quote_xml(inStr):
         pos = mo.end()
     s3 = s1[pos:]
     s2 += quote_xml_aux(s3)
-    return s2
+    return s2.decode(ExternalEncoding)
 
 
 def quote_xml_aux(inStr):
