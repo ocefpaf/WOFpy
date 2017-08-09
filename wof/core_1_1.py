@@ -727,7 +727,9 @@ class WOF_1_1(object):
         siteCode = WaterML.siteCodeType(
             network=self.network,
             siteID=siteResult.SiteID,
-            valueOf_=siteResult.SiteCode
+            valueOf_=siteResult.SiteCode,
+            agencyCode=siteResult.AgencyCode,
+            agencyName=siteResult.AgencyName
         )
 
         siteInfo.add_siteCode(siteCode)

@@ -56,7 +56,7 @@ class Variable(wof_base.BaseVariable):
 
 class Site(wof_base.BaseSite):
     """WOF Site Model."""
-    def __init__(self, s=None):
+    def __init__(self, s=None, aff=None):
         """Initialize WOF Site Object.
 
         :param s: ODM2 SamplingFeature Object
@@ -75,6 +75,9 @@ class Site(wof_base.BaseSite):
         sr.SRSName = s.SpatialReferenceObj.SRSName
         sr.Notes = s.SpatialReferenceObj.SRSDescription
         self.LatLongDatum = sr
+        if aff.OrganizationObj.OrganizationTypeCV == 'Research institute':
+            self.AgencyName = aff.OrganizationObj.OrganizationName
+            self.AgencyCode = aff.OrganizationObj.OrganizationCode
 
 
 class Series(wof_base.BaseSeries):
@@ -204,7 +207,7 @@ class Source(wof_base.BaseSource):
 
         if aff_obj.OrganizationObj is not None:
             self.Organization = aff_obj.OrganizationObj.OrganizationName
-            self.OrganizationCode = aff_obj.OrganizationObj.OrganizationCode
+            self.SourceCode = aff_obj.OrganizationObj.OrganizationCode
             self.SourceDescription = aff_obj.OrganizationObj.OrganizationDescription
             self.SourceLink = aff_obj.OrganizationObj.OrganizationLink
 
