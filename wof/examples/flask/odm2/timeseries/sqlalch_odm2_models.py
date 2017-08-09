@@ -75,7 +75,7 @@ class Site(wof_base.BaseSite):
         sr.SRSName = s.SpatialReferenceObj.SRSName
         sr.Notes = s.SpatialReferenceObj.SRSDescription
         self.LatLongDatum = sr
-        if aff.OrganizationObj.OrganizationTypeCV == 'Research institute':
+        if aff.OrganizationObj.OrganizationTypeCV in ['Government agency', 'Research agency']:
             self.AgencyName = aff.OrganizationObj.OrganizationName
             self.AgencyCode = aff.OrganizationObj.OrganizationCode
 
