@@ -823,7 +823,6 @@ class WOF_1_1(object):
             explanation=seriesResult.Explanation
         )
         series.qualityControlLevel = qualityControlLevel
-        print(vars(series))
         return series
 
     def create_variable_element(self, variableResult):
