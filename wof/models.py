@@ -87,6 +87,8 @@ class BaseSite(object):
     Comments = None
     LatLongDatum = BaseSpatialReference()
     LocalProjection = BaseSpatialReference()
+    AgencyName = None # added for wml 1.1
+    AgencyCode = None # added for wml 1.1
 
 
 class BaseDataValue(object):

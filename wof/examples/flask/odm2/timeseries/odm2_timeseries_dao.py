@@ -68,10 +68,20 @@ class Odm2Dao(BaseDao):
         try:
             s = self.db_session.query(odm2_models.Sites). \
                 filter(odm2_models.Sites.SamplingFeatureCode == site_code).one()
+
+            aff = self.db_session.query(odm2_models.Affiliations). \
+                join(odm2_models.ActionBy). \
+                join(odm2_models.Actions). \
+                join(odm2_models.FeatureActions). \
+                join(odm2_models.Sites). \
+                filter(odm2_models.Sites.SamplingFeatureCode == s.SamplingFeatureCode).first()
+        # filter(odm2_models.ActionBy.IsActionLead == True) : may be too strict,
+        # removed on 8/14/17
         except:
             s = None
+            aff = None
         if s is not None:
-            w_s = model.Site(s)
+            w_s = model.Site(s, aff)
         return w_s
 
     def get_sites_by_codes(self, site_codes_arr):
