@@ -74,8 +74,9 @@ class Odm2Dao(BaseDao):
                 join(odm2_models.Actions). \
                 join(odm2_models.FeatureActions). \
                 join(odm2_models.Sites). \
-                filter(odm2_models.Sites.SamplingFeatureCode == s.SamplingFeatureCode). \
-                filter(odm2_models.ActionBy.IsActionLead == True).first()
+                filter(odm2_models.Sites.SamplingFeatureCode == s.SamplingFeatureCode).first()
+        # filter(odm2_models.ActionBy.IsActionLead == True) : may be too strict,
+        # removed on 8/14/17
         except:
             s = None
             aff = None
