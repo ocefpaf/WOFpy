@@ -75,9 +75,10 @@ class Site(wof_base.BaseSite):
         sr.SRSName = s.SpatialReferenceObj.SRSName
         sr.Notes = s.SpatialReferenceObj.SRSDescription
         self.LatLongDatum = sr
-        if aff.OrganizationObj.OrganizationTypeCV in ['Government agency', 'Research agency']:
-            self.AgencyName = aff.OrganizationObj.OrganizationName
-            self.AgencyCode = aff.OrganizationObj.OrganizationCode
+        if aff is not None:
+            if aff.OrganizationObj.OrganizationTypeCV in ['Government agency', 'Research agency']:
+                self.AgencyName = aff.OrganizationObj.OrganizationName
+                self.AgencyCode = aff.OrganizationObj.OrganizationCode
 
 
 class Series(wof_base.BaseSeries):
@@ -207,7 +208,7 @@ class Source(wof_base.BaseSource):
 
         if aff_obj.OrganizationObj is not None:
             self.Organization = aff_obj.OrganizationObj.OrganizationName
-            self.SourceCode = aff_obj.OrganizationObj.OrganizationCode
+            self.SourceCode = self.SourceID
             self.SourceDescription = aff_obj.OrganizationObj.OrganizationDescription
             self.SourceLink = aff_obj.OrganizationObj.OrganizationLink
 
