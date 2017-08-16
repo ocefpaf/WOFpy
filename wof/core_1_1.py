@@ -810,12 +810,12 @@ class WOF_1_1(object):
         # Method.
         if seriesResult.Method:
             method = self.create_method_element(seriesResult.Method)
-            series.Method = method
+            series.method = method
 
         # Source.
         if seriesResult.Source:
             source = self.create_source_element(seriesResult.Source)
-            series.Source = source
+            series.source = source
 
         # QualityControlLevel.
         qualityControlLevel = WaterML.QualityControlLevelType(
@@ -824,7 +824,7 @@ class WOF_1_1(object):
             definition=seriesResult.Definition,
             explanation=seriesResult.Explanation
         )
-        series.QualityControlLevel = qualityControlLevel
+        series.qualityControlLevel = qualityControlLevel
         return series
 
     def create_variable_element(self, variableResult):
