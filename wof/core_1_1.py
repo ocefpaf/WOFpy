@@ -674,13 +674,7 @@ class WOF_1_1(object):
 
         site.set_siteInfo(siteInfo)
 
-        # Need at least one note element to meet WaterML 1.0 schema validation,
-        if (not siteResult.County and not
-           siteResult.State and not
-           siteResult.Comments):
-
-            siteInfo.add_note(WaterML.PropertyType())
-        else:
+        if any([siteResult.County, siteResult.State, siteResult.Comments]):
             if siteResult.County:
                 countyNote = WaterML.PropertyType(
                     name="County",
