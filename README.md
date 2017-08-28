@@ -80,6 +80,6 @@ Follow the general steps below to publish your data with WOFpy.
 Credits
 -------
 
-This work was supported by National Science Foundation Grant [ACI-1339834](http://www.nsf.gov/awardsearch/showAward?AWD_ID=1339834).
-Any opinions, findings,
-and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
+WOFpy was [originally](https://github.com/swtools/WOFpy/) developed and maintained (2011-2012) by the [Texas Water Development Board](http://www.twdb.texas.gov). Stewardship and continued development was taken up in 2015 by a multi-institution team associated with the [ODM2](http://www.odm2.org) and [BiG-CZ](https://bigcz.org/) projects, with support from National Science Foundation Grant [ACI-1339834](http://www.nsf.gov/awardsearch/showAward?AWD_ID=1339834).
+
+Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
