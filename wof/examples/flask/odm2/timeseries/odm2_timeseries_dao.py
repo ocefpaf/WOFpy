@@ -151,7 +151,7 @@ class Odm2Dao(BaseDao):
 
         r_t_Arr = []
         if l_var_codes is None:
-            if self.engine.name is 'postgresql':
+            if self.engine.name is 'postgresql' or self.engine.name is 'mssql':
                 r_t = self.db_session.query(odm2_models.TimeSeriesResultValues). \
                     join(odm2_models.TimeSeriesResults). \
                     distinct(odm2_models.TimeSeriesResults.VariableID).all()
@@ -162,7 +162,7 @@ class Odm2Dao(BaseDao):
             r_t_Arr.append(r_t)
         else:
             for item in l_var_codes:
-                if self.engine.name is 'postgresql':
+                if self.engine.name is 'postgresql' or self.engine.name is 'mssql':
                     r_t = self.db_session.query(odm2_models.TimeSeriesResultValues). \
                         join(odm2_models.TimeSeriesResults). \
                         join(odm2_models.Variables). \
