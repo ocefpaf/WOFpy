@@ -41,11 +41,20 @@ class Odm2Dao(BaseDao):
         """Closes Database Session."""
         self.db_session.close()
 
+    def db_check(self):
+        try:
+            self.db_session.query(odm2_models.SamplingFeatures).first()
+        except:
+            self.db_session.rollback()
+        finally:
+            pass
+
     def get_all_sites(self):
         """Get all wof sites from odm2 database.
 
         :return: List of WOF Sites
         """
+        self.db_check()
         s_rArr = self.db_session.query(odm2_models.Sites). \
             join(odm2_models.FeatureActions). \
             join(odm2_models.TimeSeriesResults). \
@@ -64,6 +73,7 @@ class Odm2Dao(BaseDao):
         :param site_code: Site Code Ex. 'USU-LBR-Mendon'
         :return: WOF Site
         """
+        self.db_check()
         w_s = None
         try:
             s = self.db_session.query(odm2_models.Sites). \
@@ -90,6 +100,7 @@ class Odm2Dao(BaseDao):
         :param site_codes_arr: List of Site Codes Ex. ['USU-LBR-Mendon', 'USU-LBR-Mendon2']
         :return: List of WOF Sites
         """
+        self.db_check()
         s_arr = []
         for site_code in site_codes_arr:
             w_s = self.get_site_by_code(site_code)
@@ -106,6 +117,7 @@ class Odm2Dao(BaseDao):
         :param east: east - xmax - longitude
         :return: List of WOF Sites
         """
+        self.db_check()
         s_rArr = self.db_session.query(odm2_models.Sites). \
             join(odm2_models.FeatureActions). \
             join(odm2_models.TimeSeriesResults). \
@@ -127,6 +139,7 @@ class Odm2Dao(BaseDao):
         :param var_codes: List of Variable Codes Ex. ['TEMP', 'SAL']
         :return: List of WOF Variables
         """
+        self.db_check()
         # TODO: Need to refine this function; currently seeking database.
         l_var_codes = None
         if var_codes is not None:
@@ -186,6 +199,7 @@ class Odm2Dao(BaseDao):
 
         :return: List of WOF Variables
         """
+        self.db_check()
         v_arr = self.get_variables_from_results()
         return v_arr
 
@@ -195,6 +209,7 @@ class Odm2Dao(BaseDao):
         :param var_code: Variable Codes Ex. 'TEMP'
         :return: WOF Variable
         """
+        self.db_check()
         w_v = None
         v_arr = self.get_variables_from_results(var_code)
         if len(v_arr) is not 0:
@@ -207,6 +222,7 @@ class Odm2Dao(BaseDao):
         :param var_codes_arr: List of Variable Codes Ex. ['TEMP', 'SAL']
         :return: List of WOF Variables
         """
+        self.db_check()
         v_arr = self.get_variables_from_results(var_codes_arr)
         return v_arr
 
@@ -216,6 +232,7 @@ class Odm2Dao(BaseDao):
         :param site_code: Site Code Ex. 'USU-LBR-Mendon'
         :return: List of WOF Series
         """
+        self.db_check()
         r = self.db_session.query(odm2_models.TimeSeriesResults). \
             join(odm2_models.FeatureActions). \
             join(odm2_models.SamplingFeatures). \
@@ -251,6 +268,7 @@ class Odm2Dao(BaseDao):
         :param var_code: Variable Code Ex. 'TEMP'
         :return: List of WOF Series
         """
+        self.db_check()
         r = self.db_session.query(odm2_models.TimeSeriesResults). \
             join(odm2_models.FeatureActions). \
             join(odm2_models.SamplingFeatures). \
@@ -293,6 +311,7 @@ class Odm2Dao(BaseDao):
         :param end_date_time: End Time Ex. '2008-03-27 19:30:00.000'
         :return: List of WOF DataValue
         """
+        self.db_check()
         if not begin_date_time or not end_date_time:
             try:
                 valueResultArr = self.db_session.query(odm2_models.TimeSeriesResultValues). \
@@ -349,6 +368,7 @@ class Odm2Dao(BaseDao):
         :param method_id: Method ID. Ex. 'METHOD1'
         :return: A WOF Method
         """
+        self.db_check()
         m = self.db_session.query(odm2_models.Methods). \
             filter(odm2_models.Methods.MethodID == method_id).first()
         w_m = model.Method(m)
@@ -360,6 +380,7 @@ class Odm2Dao(BaseDao):
         :param method_id_arr: List of Method ID. Ex. ['METHOD1', 'METHOD2']
         :return: List of WOF Method
         """
+        self.db_check()
         m = self.db_session.query(odm2_models.Methods). \
             filter(odm2_models.Methods.MethodID.in_(method_id_arr)).all()
         m_arr = []
@@ -374,6 +395,7 @@ class Odm2Dao(BaseDao):
         :param source_id: Affiliation ID.
         :return: A WOF Source
         """
+        self.db_check()
         aff = self.db_session.query(odm2_models.Affiliations). \
             filter(odm2_models.Affiliations.AffiliationID == source_id).one()
         w_aff = model.Source(aff)
@@ -385,6 +407,7 @@ class Odm2Dao(BaseDao):
         :param source_id_arr: List of Affiliation ID.
         :return: List WOF Source
         """
+        self.db_check()
         aff = self.db_session.query(odm2_models.Affiliations). \
             filter(odm2_models.Affiliations.AffiliationID.in_(source_id_arr)).all()
         aff_arr = []
@@ -399,6 +422,7 @@ class Odm2Dao(BaseDao):
         :param qual_control_lvl_id: Processing Level ID.
         :return: A WOF Quality Control Level
         """
+        self.db_check()
         pl = self.db_session.query(odm2_models.ProcessingLevels) \
             .filter(odm2_models.ProcessingLevels.ProcessingLevelID == qual_control_lvl_id).first()
         w_pl = model.QualityControlLevel(pl)
@@ -410,6 +434,7 @@ class Odm2Dao(BaseDao):
         :param qual_control_lvl_id_arr: List Processing Level ID.
         :return: List of WOF Quality Control Level
         """
+        self.db_check()
         pl = self.db_session.query(odm2_models.ProcessingLevels) \
             .filter(odm2_models.ProcessingLevels.ProcessingLevelID.in_(qual_control_lvl_id_arr)).all()
         pl_arr = []
