@@ -1,0 +1,41 @@
+censorcode:
+  gt:
+  - Greater than
+  lt:
+  - Less than
+  nc:
+  - Not censored
+  nd:
+  - Non-detect
+  pnq:
+  - Present but not quantified
+
+
+datatype:
+  Best Easy Systematic Estimator:
+  - Best easy systematic estimator
+  Constant Over Interval:
+  - Constant over interval
+  StandardDeviation:
+  - Standard deviation
+
+samplemedium:
+  Not Relevant:
+  - Not applicable
+  Other:
+  - Rock
+  - Regolith
+  - Mineral
+  - Ice
+  - Habitat
+  Surface water:
+  - Liquid aqueous
+  - Liquid organic
+  Suspended particulate matter:
+  - Particulate
+  Tissue:
+  - Organism
+  Tree:
+  - Vegetation
+  Wellhead Gas:
+  - Gas
