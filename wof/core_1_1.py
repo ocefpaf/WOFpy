@@ -8,7 +8,7 @@ import dateutil.parser
 
 from wof import WaterML_1_1 as WaterML
 from wof import core
-from wof import utils
+from wof import vocabularies
 
 
 class WOF_1_1(object):
@@ -638,7 +638,7 @@ class WOF_1_1(object):
         if not hasattr(valueResult, 'SourceCode'):
             setattr(valueResult, 'SourceCode', None)
 
-        clean_censorCode = utils.check_censorCode(valueResult.CensorCode)
+        clean_censorCode = vocabularies.check_censorCode(valueResult.CensorCode)
         # clean_qcl = self.check_QualityControlLevel(valueResult.QualityControlLevel)  # noqa
 
         value = WaterML.ValueSingleVariable(
@@ -822,10 +822,10 @@ class WOF_1_1(object):
         return series
 
     def create_variable_element(self, variableResult):
-        clean_datatype = utils.check_dataTypeEnum(variableResult.DataType)
-        clean_medium = utils.check_SampleMedium(variableResult.SampleMedium)
-        clean_category = utils.check_generalCategory(variableResult.GeneralCategory)  # noqa
-        clean_valuetype = utils.check_valueType(variableResult.ValueType)
+        clean_datatype = vocabularies.check_dataTypeEnum(variableResult.DataType)
+        clean_medium = vocabularies.check_SampleMedium(variableResult.SampleMedium)
+        clean_category = vocabularies.check_generalCategory(variableResult.GeneralCategory)  # noqa
+        clean_valuetype = vocabularies.check_valueType(variableResult.ValueType)
         variable = WaterML.VariableInfoType(
             variableName=variableResult.VariableName,
             valueType=clean_valuetype,
@@ -850,7 +850,7 @@ class WOF_1_1(object):
         variableCode.valueOf_ = v_code
 
         variable.add_variableCode(variableCode)
-        clean_variableUnits = utils.check_UnitsType(variableResult.VariableUnits.UnitsType)  # noqa
+        clean_variableUnits = vocabularies.check_UnitsType(variableResult.VariableUnits.UnitsType)  # noqa
 
         if variableResult.VariableUnits:
             units = WaterML.UnitsType(
