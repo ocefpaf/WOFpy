@@ -3,6 +3,8 @@
 from __future__ import (absolute_import, division, print_function)
 
 from dateutil.parser import parse
+import os
+import yaml
 
 from sqlalchemy import (create_engine, func)
 from sqlalchemy.orm import (scoped_session, sessionmaker)
@@ -11,7 +13,6 @@ from odm2api.ODM2 import models as odm2_models
 
 import wof.examples.flask.odm2.timeseries.sqlalch_odm2_models as model
 from wof.dao import BaseDao
-import yaml
 
 
 class Odm2Dao(BaseDao):
@@ -39,7 +40,7 @@ class Odm2Dao(BaseDao):
         self.db_session = Session()
 
         # Read in WaterML -> ODM2 CV Mapping
-        with open('../cvmap_wml_1_1.yml') as yml:
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'cvmap_wml_1_1.yml'))) as yml:
             self.yml_dict = yaml.load(yml)
 
     def __del__(self):
