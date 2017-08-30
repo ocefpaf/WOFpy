@@ -12,14 +12,14 @@ matrix:
   - python: 2.7
     env: TEST_TARGET=cli
   - python: 2.7
-    env: TEST_TARGET=examples
+    env: TEST_TARGET=build_cbi
   - python: 2.7
     env: TEST_TARGET=coding_standards
   allow_failures:
   - python: 3.6
     env: TEST_TARGET=default
   - python: 2.7
-    env: TEST_TARGET=examples
+    env: TEST_TARGET=build_cbi
   - python: 2.7
     env: TEST_TARGET=coding_standards
 
@@ -48,9 +48,9 @@ script:
       py.test -s -rxs -v ;
     fi
 
-  - if [[ $TEST_TARGET == 'default' ]]; then
+  - if [[ $TEST_TARGET == 'build_cbi' ]]; then
       python wof/examples/flask/cbi/build_cbi_cache.py ;
-      python wof/examples/flask/swis/runserver_swis.py --config=./test/test_swis_config2.cfg --connection=sqlite:///./test/test_swis2.db ;
+      python wof/examples/flask/swis/runserver_swis.py --config=./test/test_swis_config2.cfg --connection=sqlite:///./test/test_swis2.db > /dev/null & py.test -s -rxs -v ;
     fi
 
   - if [[ $TEST_TARGET == 'cli' ]]; then
