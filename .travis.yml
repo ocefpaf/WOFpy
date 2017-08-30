@@ -47,12 +47,12 @@ before_script:
 
 script:
   - if [[ $TEST_TARGET == 'default' ]]; then
-      py.test -s -rxs -v ;
+      py.test -s -rxs -v -k "not cbi" ;
     fi
 
   - if [[ $TEST_TARGET == 'build_cbi' ]]; then
       python wof/examples/flask/cbi/build_cbi_cache.py ;
-      py.test -s -rxs -v ;
+      py.test -s -rxs -v -k "cbi" ;
     fi
 
   - if [[ $TEST_TARGET == 'cli' ]]; then
