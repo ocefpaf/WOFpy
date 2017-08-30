@@ -9,7 +9,7 @@ import pytest
 from wof.wofpy_config import makedirs
 
 
-@pytest.fixture
+@pytest.fixture(scope='function')
 def mkdtemp():
     _directory = tempfile.mkdtemp()
     _stat = os.stat(_directory)
