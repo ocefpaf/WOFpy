@@ -29,6 +29,10 @@ class Variable(wof_base.BaseVariable):
         self.Speciation = v.SpeciationCV
         self.VariableUnitsID = v_unit.UnitsID
         self.GeneralCategory = v.VariableTypeCV
+        self.ValueType = "ASSIGN ME"
+
+        self.GeneralCategoryValidate = False
+        self.ValueTypeValidate = False
 
         if v_unit is not None:
             self.VariableUnits = Unit(v_unit)
@@ -41,11 +45,9 @@ class Variable(wof_base.BaseVariable):
             self.TimeUnits = None
 
     # SampleMedium = wof_base.SampleMediumTypes.NOT_RELEVANT
-    # ValueType = Column(String)
     # IsRegular = Column(Boolean)
     # TimeSupport = Column(Float)
     # TimeUnitsID = Column(Integer, ForeignKey('Units.UnitsID'))
-    # DataType = Column(String)
 
     # VariableUnits = relationship("Units",
     #                    primaryjoin='Variable.VariableUnitsID==Units.UnitsID')
@@ -103,9 +105,7 @@ class Series(wof_base.BaseSeries):
         # self.SiteCode = sf_obj.SamplingFeatureCode
         # self.SiteName = sf_obj.SamplingFeatureName
 
-        self.Variable = Variable(v_obj,
-                                 r.SampledMediumCV,
-                                 u_obj)
+        self.Variable = Variable(v_obj, r.SampledMediumCV, u_obj)
         # self.VariableID = r.VariableID
         # self.VariableCode = v_obj.VariableCode
         # self.VariableName = v_obj.VariableNameCV
@@ -195,6 +195,8 @@ class Unit(wof_base.BaseUnits):
         self.UnitsName = u_obj.UnitsName
         self.UnitsType = u_obj.UnitsTypeCV
         self.UnitsAbbreviation = u_obj.UnitsAbbreviation
+
+        self.UnitsTypeValidate = False
 
 
 class Source(wof_base.BaseSource):

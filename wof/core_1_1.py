@@ -8,7 +8,7 @@ import dateutil.parser
 
 from wof import WaterML_1_1 as WaterML
 from wof import core
-from wof import vocabularies
+from wof import vocabularies as voc
 
 
 class WOF_1_1(object):
@@ -638,7 +638,7 @@ class WOF_1_1(object):
         if not hasattr(valueResult, 'SourceCode'):
             setattr(valueResult, 'SourceCode', None)
 
-        clean_censorCode = vocabularies.check_censorCode(valueResult.CensorCode)
+        clean_censorCode = voc.check_censorCode(valueResult.CensorCode)
         # clean_qcl = self.check_QualityControlLevel(valueResult.QualityControlLevel)  # noqa
 
         value = WaterML.ValueSingleVariable(
@@ -822,10 +822,20 @@ class WOF_1_1(object):
         return series
 
     def create_variable_element(self, variableResult):
-        clean_datatype = vocabularies.check_dataTypeEnum(variableResult.DataType)
-        clean_medium = vocabularies.check_SampleMedium(variableResult.SampleMedium)
-        clean_category = vocabularies.check_generalCategory(variableResult.GeneralCategory)  # noqa
-        clean_valuetype = vocabularies.check_valueType(variableResult.ValueType)
+        clean_datatype = voc.check_dataTypeEnum(variableResult.DataType)
+        clean_medium = voc.check_SampleMedium(variableResult.SampleMedium)
+        # GeneralCategoryValidate and ValueTypeValidate optional capability added to support ODM2 CV handling
+        _GeneralCategoryValidate = True
+        if hasattr(variableResult, 'GeneralCategoryValidate'):
+            _GeneralCategoryValidate = variableResult.GeneralCategoryValidate
+        clean_category = voc.check_generalCategory(variableResult.GeneralCategory,
+                                                  validate=_GeneralCategoryValidate)
+        _ValueTypeValidate = True
+        if hasattr(variableResult, 'ValueTypeValidate'):
+            _ValueTypeValidate = variableResult.ValueTypeValidate
+        clean_valuetype = voc.check_valueType(variableResult.ValueType,
+                                              validate=_ValueTypeValidate)
+
         variable = WaterML.VariableInfoType(
             variableName=variableResult.VariableName,
             valueType=clean_valuetype,
@@ -850,13 +860,18 @@ class WOF_1_1(object):
         variableCode.valueOf_ = v_code
 
         variable.add_variableCode(variableCode)
-        clean_variableUnits = vocabularies.check_UnitsType(variableResult.VariableUnits.UnitsType)  # noqa
+        # UnitsTypeValidate optional capability added to support ODM2 CV handling
+        _UnitsTypeValidate = True
+        if hasattr(variableResult.VariableUnits, 'UnitsTypeValidate'):
+            _UnitsTypeValidate = variableResult.VariableUnits.UnitsTypeValidate
+        clean_variableUnitsType = voc.check_UnitsType(variableResult.VariableUnits.UnitsType,
+                                                      validate=_UnitsTypeValidate)
 
         if variableResult.VariableUnits:
             units = WaterML.UnitsType(
                 unitAbbreviation=variableResult.VariableUnits.UnitsAbbreviation,  # noqa
                 unitCode=variableResult.VariableUnitsID,
-                unitType=clean_variableUnits,
+                unitType=clean_variableUnitsType,
                 unitName=variableResult.VariableUnits.UnitsName)
 
             variable.set_unit(units)

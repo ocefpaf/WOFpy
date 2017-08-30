@@ -6,7 +6,6 @@ import logging
 import pytz
 import os
 
-
 from lxml import objectify
 from suds.client import Client
 
@@ -35,7 +34,7 @@ def update_watermlcvs():
 
         watermlcvs = {
             'updated': datetime.datetime.now(pytz.utc).isoformat(),
-            'controlled_vocab': {
+            'cv': {
                 'datatype': parse_xml(CLIENT.service.GetDataTypeCV()),
                 'unitstype': parse_xml(CLIENT.service.GetUnits()),
                 'samplemedium': parse_xml(CLIENT.service.GetSampleMediumCV()),
@@ -46,172 +45,52 @@ def update_watermlcvs():
         }
 
         json.dump(watermlcvs, open(os.path.join(work_dir, 'watermlcvs.json'), 'wb'))
-        print('Success WaterML 1.1 Controlled Vocabularies has been updated.')
+        print('Success, WaterML 1.1 controlled vocabularies have been updated.')
     except:
-        print('Can\'t connect to CUAHSI Service, controlled vocabularies are not updated.')
+        print('Can\'t connect to CUAHSI Service, WaterML 1.1 controlled vocabularies are not updated.')
 
 
-def get_waterml_cvs(): return json.load(open(os.path.join(os.path.abspath(os.path.curdir),
-                                                          'watermlcvs.json'), 'rb'))
+def get_watermlcvs():
+    return json.load(open(os.path.join(os.path.abspath(os.path.curdir),
+                                       'watermlcvs.json'), 'rb'))
 
 
-def check_dataTypeEnum(datatype):
+def check_dataTypeEnum(term, validate=True):
+    cv, default = "datatype", "Unknown"
+    return _check_CVTerm(cv, term, default, checknone=True, validate=validate)
+
+
+def check_UnitsType(term, validate=True):
+    # "Unknown" is not actually a valid WaterML 1.1 UnitsType term, but there is no equivalent. So be it
+    cv, default = "unitstype", "Unknown"
+    return _check_CVTerm(cv, term, default, checknone=True, validate=validate)
+
+
+def check_SampleMedium(term, validate=True):
+    cv, default = "samplemedium", "Unknown"
+    return _check_CVTerm(cv, term, default, checknone=True, validate=validate)
+
+
+def check_generalCategory(term, validate=True):
+    cv, default = "generalcategory", "Unknown"
+    return _check_CVTerm(cv, term, default, checknone=True, validate=validate)
+
+
+def check_valueType(term, validate=True):
+    cv, default = "valuetype", "Unknown"
+    return _check_CVTerm(cv, term, default, checknone=True, validate=validate)
+
+
+def check_censorCode(term, validate=True):
+    cv, default = "censorcode", "nc"
+    return _check_CVTerm(cv, term, default, checknone=False, validate=validate)
+
+
+# This checker is odd, as it's not actually checking against an existing WaterML 1.1 CV
+# So, it's not using the common _check_CVTerm machinery at this time
+def check_QualityControlLevel(term):
     default = "Unknown"
-    valueList = get_waterml_cvs()['controlled_vocab']['datatype']
-    # valueList = [
-    #     "Continuous",
-    #     "Instantaneous",
-    #     "Cumulative",
-    #     "Incremental",
-    #     "Average",
-    #     "Maximum",
-    #     "Minimum",
-    #     "Constant Over Interval",
-    #     "Categorical",
-    #     "Best Easy Systematic Estimator ",
-    #     "Unknown",
-    #     "Variance",
-    #     "Median",
-    #     "Mode",
-    #     "Best Easy Systematic Estimator",
-    #     "Standard Deviation",
-    #     "Skewness",
-    #     "Equivalent Mean",
-    #     "Sporadic",
-    #     "Unknown",
-    # ]
-    if datatype is None:
-        logging.warn('Datatype is not specified')
-        return default
-    if (datatype in valueList):
-        return datatype
-    else:
-        logging.warn('value outside of enum for datatype ' + datatype)
-        return default
-
-
-def check_UnitsType(UnitsType):
-    default = "Dimensionless"
-    valueList = get_waterml_cvs()['controlled_vocab']['unitstype']
-    # valueList = [
-    #     "Angle",
-    #     "Area",
-    #     "Dimensionless",
-    #     "Energy",
-    #     "Energy Flux",
-    #     "Flow",
-    #     "Force",
-    #     "Frequency",
-    #     "Length",
-    #     "Light",
-    #     "Mass",
-    #     "Permeability",
-    #     "Power",
-    #     "Pressure/Stress",
-    #     "Resolution",
-    #     "Scale",
-    #     "Temperature",
-    #     "Time",
-    #     "Velocity",
-    #     "Volume",
-    # ]
-    if UnitsType is None:
-        logging.warn('UnitsType is not specified ')
-        return default
-    if (UnitsType in valueList):
-        return UnitsType
-    else:
-        logging.warn('value outside of enum for UnitsType ' + UnitsType)
-        return default
-
-
-def check_SampleMedium(SampleMedium):
-    default = "Unknown"
-    valueList = get_waterml_cvs()['controlled_vocab']['samplemedium']
-    # valueList = [
-    #     "Surface Water",
-    #     "Ground Water",
-    #     "Sediment",
-    #     "Soil",
-    #     "Air",
-    #     "Tissue",
-    #     "Precipitation",
-    #     "Unknown",
-    #     "Other",
-    #     "Snow",
-    #     "Not Relevant",
-    # ]
-    if SampleMedium is None:
-        logging.warn('SampleMedium is not specified')
-        return default
-    if (SampleMedium in valueList):
-        return SampleMedium
-    else:
-        logging.warn('default returned: value outside of enum for SampleMedium ' + SampleMedium)  # noqa
-        return default
-
-
-def check_generalCategory(generalCategory):
-    default = "Unknown"
-    valueList = get_waterml_cvs()['controlled_vocab']['generalcategory']
-    # valueList = [
-    #     "Water Quality",
-    #     "Climate",
-    #     "Hydrology",
-    #     "Geology",
-    #     "Biota",
-    #     "Unknown",
-    #     "Instrumentation",
-    # ]
-    if generalCategory is None:
-        logging.warn('GeneralCategory is not specified')
-        return default
-    if (generalCategory in valueList):
-        return generalCategory
-    else:
-        logging.warn('default returned: value outside of enum for generalCategory ' + generalCategory)  # noqa
-        return default
-
-
-def check_valueType(valueType):
-    default = "Unknown"
-    valueList = get_waterml_cvs()['controlled_vocab']['valuetype']
-    # valueList = [
-    #     "Field Observation",
-    #     "Sample",
-    #     "Model Simulation Result",
-    #     "Derived Value",
-    #     "Unknown",
-    # ]
-    if valueType is None:
-        logging.warn('ValueType is not specified')
-        return default
-    if (valueType in valueList):
-        return valueType
-    else:
-        logging.warn('default returned: value outside of enum for valueType ' + valueType)  # noqa
-        return default
-
-
-def check_censorCode(censorCode):
-    default = "nc"
-    valueList = get_waterml_cvs()['controlled_vocab']['censorcode']
-    # valueList = [
-    #     "lt",
-    #     "gt",
-    #     "nc",
-    #     "nd",
-    #     "pnq",
-    # ]
-    if (censorCode in valueList):
-        return censorCode
-    else:
-        return default
-
-
-def check_QualityControlLevel(QualityControlLevel):
-    default = "Unknown"
-    valueList = [
+    cvterms = [
         "Raw data",
         "Quality controlled data",
         "Derived products",
@@ -219,7 +98,26 @@ def check_QualityControlLevel(QualityControlLevel):
         "Knowledge products",
         "Unknown",
     ]
-    if (QualityControlLevel in valueList):
-        return QualityControlLevel
+
+    if term in cvterms:
+        return term
     else:
         return default
+
+
+def _check_CVTerm(cv, term, termdefault, checknone=True, validate=True):
+
+    if checknone and term is None:
+        logging.warn('default returned: {} term is not specified'.format(cv))
+        return termdefault
+
+    if validate:
+        cvterms = get_watermlcvs()['cv'][cv]
+
+        if term in cvterms:
+            return term
+        else:
+            logging.warn('default returned: {0} {1} term does not match CV terms list'.format(cv, term))
+            return termdefault
+    else:
+        return term
