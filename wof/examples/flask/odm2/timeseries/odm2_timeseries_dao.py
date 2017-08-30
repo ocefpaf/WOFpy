@@ -11,6 +11,7 @@ from odm2api.ODM2 import models as odm2_models
 
 import wof.examples.flask.odm2.timeseries.sqlalch_odm2_models as model
 from wof.dao import BaseDao
+import yaml
 
 
 class Odm2Dao(BaseDao):
@@ -37,6 +38,10 @@ class Odm2Dao(BaseDao):
 
         self.db_session = Session()
 
+        # Read in WaterML -> ODM2 CV Mapping
+        with open('../cvmap_wml_1_1.yml') as yml:
+            self.yml_dict = yaml.load(yml)
+
     def __del__(self):
         """Closes Database Session."""
         self.db_session.close()
@@ -48,6 +53,12 @@ class Odm2Dao(BaseDao):
             self.db_session.rollback()
         finally:
             pass
+
+    def get_match(self, cvkey, term):
+        for k, v in self.yml_dict[cvkey].items():
+            if term in v:
+                return k
+        return term
 
     def get_all_sites(self):
         """Get all wof sites from odm2 database.
@@ -190,6 +201,9 @@ class Odm2Dao(BaseDao):
                     ti = result.TimeAggregationInterval
                     ag = result.ResultObj.AggregationStatisticCV
                     w_v = model.Variable(v, s, u, t, ti, ag)
+                    w_v.DataType = self.get_match('datatype', w_v.DataType)
+                    w_v.SampleMedium = self.get_match('samplemedium', w_v.SampleMedium)
+
                     v_arr.append(w_v)
 
         return v_arr
@@ -258,6 +272,7 @@ class Odm2Dao(BaseDao):
             r[i].tsrv_EndDateTime = edt_dict[r[i].ResultID]
 
             w_r = model.Series(r[i], aff)
+            w_r.SampleMedium = self.get_match('samplemedium', w_r.SampleMedium)
             r_arr.append(w_r)
         return r_arr
 
@@ -297,6 +312,7 @@ class Odm2Dao(BaseDao):
             r[i].tsrv_EndDateTime = edt_dict[r[i].ResultID]
 
             w_r = model.Series(r[i], aff)
+            w_r.SampleMedium = self.get_match('samplemedium', w_r.SampleMedium)
             r_arr.append(w_r)
         return r_arr
 
@@ -359,6 +375,7 @@ class Odm2Dao(BaseDao):
                         join(odm2_models.ActionBy). \
                         filter(odm2_models.ActionBy.ActionID == act_id).first()
                 w_v = model.DataValue(valueResult, aff)
+                w_v.CensorCode = self.get_match('censorcode', w_v.CensorCode)
                 v_arr.append(w_v)
         return v_arr
 
