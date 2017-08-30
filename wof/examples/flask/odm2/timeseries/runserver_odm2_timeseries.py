@@ -11,7 +11,7 @@ import argparse
 import configparser
 
 import wof.flask
-import wof.utils
+import wof.vocabularies
 from wof.examples.flask.odm2.timeseries.odm2_timeseries_dao import Odm2Dao
 
 
@@ -43,7 +43,7 @@ dao = Odm2Dao(get_connection(args.config))
 app = wof.flask.create_wof_flask_app(dao, args.config)
 
 if __name__ == '__main__':
-    wof.utils.update_watermlcvs()
+    wof.vocabularies.update_watermlcvs()
     app.config['DEBUG'] = True
 
     url = 'http://127.0.0.1:' + str(args.port)

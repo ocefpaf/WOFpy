@@ -8,7 +8,7 @@ import os
 
 import wof
 import wof.flask
-import wof.utils
+import wof.vocabularies
 from wof.examples.flask.odm2.timeseries.odm2_timeseries_dao import Odm2Dao as timeseries
 
 # Set the paths for config files here.
@@ -46,7 +46,7 @@ s_conf = wof.core.wofConfig(s_dao, S_CONFIG_FILE)
 app = wof.flask.create_wof_flask_multiple({m_conf, s_conf}, templates=wof._TEMPLATES)
 
 if __name__ == '__main__':
-    wof.utils.update_watermlcvs()
+    wof.vocabularies.update_watermlcvs()
     url = "http://127.0.0.1:" + str(args.port)
     print("----------------------------------------------------------------")
     print("Service endpoints")

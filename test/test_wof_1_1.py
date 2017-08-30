@@ -9,7 +9,7 @@ from lxml import etree, objectify
 from test_dao_1_1 import TestDao
 
 from wof import WOF_1_1 as WOF
-import wof.utils
+import wof.vocabularies
 
 TEST_CONFIG_FILE = 'test_config.cfg'
 TEST_XML_DIR = 'test_xml'
@@ -34,7 +34,7 @@ class TestWOF(unittest.TestCase):
         self.wof_inst = WOF(dao, testConfig)
 
         if not os.path.exists(os.path.join(os.path.abspath(os.path.curdir), 'watermlcvs.json')):
-            wof.utils.update_watermlcvs()
+            wof.vocabularies.update_watermlcvs()
 
         waterml_schema_path = os.path.join(
             os.path.dirname(__file__),
