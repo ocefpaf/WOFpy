@@ -10,7 +10,8 @@ from wof import models as wof_base
 class Variable(wof_base.BaseVariable):
     """WOF Variable Model."""
     def __init__(self, v=None, VarSampleMedium=None,
-                 v_unit=None, v_tunit=None, v_timeinterval=None, aggregationstatisticCV=None):
+                 v_unit=None, v_tunit=None, v_timeinterval=None,
+                 aggregationstatisticCV=None, actiontypeCV=None):
         """Initialize WOF Variable Object.
 
         :param v: ODM2 Variable Object
@@ -18,6 +19,8 @@ class Variable(wof_base.BaseVariable):
         :param v_unit: ODM2 Unit Object
         :param v_tunit: ODM2 TimeAggregationIntervalUnits Object
         :param v_timeinterval: ODM2 TimeSeriesResultValues TimeAggregationInterval
+        :param aggregationstatisticCV: ODM2 Result AggregationStatisticCV
+        :param actiontypeCV: ODM2 Action ActionTypeCV
         """
         self.VariableID = v.VariableID
         self.VariableCode = v.VariableCode
@@ -29,7 +32,7 @@ class Variable(wof_base.BaseVariable):
         self.Speciation = v.SpeciationCV
         self.VariableUnitsID = v_unit.UnitsID
         self.GeneralCategory = v.VariableTypeCV
-        self.ValueType = "ASSIGN ME"
+        self.ValueType = actiontypeCV
 
         self.GeneralCategoryValidate = False
         self.ValueTypeValidate = False

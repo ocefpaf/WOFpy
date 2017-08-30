@@ -201,7 +201,8 @@ class Odm2Dao(BaseDao):
                     t = result.TimeAggregationIntervalUnitsObj
                     ti = result.TimeAggregationInterval
                     ag = result.ResultObj.AggregationStatisticCV
-                    w_v = model.Variable(v, s, u, t, ti, ag)
+                    at = result.ResultObj.FeatureActionObj.ActionObj.ActionTypeCV
+                    w_v = model.Variable(v, s, u, t, ti, ag, at)
                     w_v.DataType = self.get_match('datatype', w_v.DataType)
                     w_v.SampleMedium = self.get_match('samplemedium', w_v.SampleMedium)
 
