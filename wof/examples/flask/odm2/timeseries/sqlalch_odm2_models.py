@@ -27,11 +27,12 @@ class Variable(wof_base.BaseVariable):
         self.VariableName = v.VariableNameCV
         self.VariableDescription = v.VariableDefinition
         self.NoDataValue = v.NoDataValue
-        self.SampleMedium = VarSampleMedium
-        self.DataType = aggregationstatisticCV
         self.Speciation = v.SpeciationCV
         self.VariableUnitsID = v_unit.UnitsID
         self.GeneralCategory = v.VariableTypeCV
+
+        self.SampleMedium = VarSampleMedium
+        self.DataType = aggregationstatisticCV
         self.ValueType = actiontypeCV
 
         self.GeneralCategoryValidate = False
@@ -108,7 +109,8 @@ class Series(wof_base.BaseSeries):
         # self.SiteCode = sf_obj.SamplingFeatureCode
         # self.SiteName = sf_obj.SamplingFeatureName
 
-        self.Variable = Variable(v_obj, r.SampledMediumCV, u_obj)
+        self.Variable = Variable(v=v_obj, VarSampleMedium=r.SampledMediumCV, v_unit=u_obj,
+                                 aggregationstatisticCV=r.AggregationStatisticCV, actiontypeCV=a_obj.ActionTypeCV)
         # self.VariableID = r.VariableID
         # self.VariableCode = v_obj.VariableCode
         # self.VariableName = v_obj.VariableNameCV
