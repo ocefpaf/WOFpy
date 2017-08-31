@@ -39,11 +39,11 @@ setup(
     author_email='james.seppi@gmail.com',
     # note: maintainer gets listed as author in PKG-INFO, so leaving
     # this commented out for now
-    maintainer='David Valentine',
-    maintainer_email='david.valentine@gmail.com',
+    maintainer='Emilio Mayorga',
+    maintainer_email='emiliom@uw.edu',
     description='a python library for serving WaterOneFlow web services',
     long_description=__doc__,
-    keywords='cuahsi his wofpy water waterml cuahsi wateroneflow odm2 czodata',
+    keywords='cuahsi his wofpy water waterml cuahsi wateroneflow odm2',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
@@ -57,7 +57,7 @@ setup(
     },
     tests_require=['suds-jurko', 'requests'],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
