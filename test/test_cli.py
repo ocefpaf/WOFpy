@@ -24,18 +24,18 @@ def test_makedirs_do_not_overwrite():
 
 
 @pytest.mark.skipif(sys.platform == 'win32',
-                    reason='st_ino does not work on Windows')
+                    reason='st_mode does not work on Windows')
 def test_makedirs_overwrite_soft():
     _directory, _stat = mkdtemp().next()
     makedirs(_directory, overwrite='soft')
     stat = os.stat(_directory)
-    assert _stat.st_ino == stat.st_ino
+    assert _stat.st_mode == stat.st_mode
 
 
 @pytest.mark.skipif(sys.platform == 'win32',
-                    reason='st_ino does not work on Windows')
+                    reason='st_mode does not work on Windows')
 def test_makedirs_overwrite_hard():
     _directory, _stat = mkdtemp().next()
     makedirs(_directory, overwrite='hard')
     stat = os.stat(_directory)
-    assert _stat.st_ino != stat.st_ino
+    assert _stat.st_mode != stat.st_mode
