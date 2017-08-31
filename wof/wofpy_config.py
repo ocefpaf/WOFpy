@@ -64,15 +64,21 @@ def copytree(src, dst, symlinks=False, ignore=None, overwrite='soft'):
             shutil.copy2(s, d)
 
 
-def main():
+def parse_args():
     args = docopt(__doc__, version='1.0.0')
+    return args
+
+
+def cli(args):
     directory = args.get('INDIR')
     mode = args.get('--mode').lower()
+    overwrite = args.get('--overwrite').lower()
+
     if mode not in ['development', 'production']:
         raise ValueError(
             'Got mode: {!r}, expected development, or production.'.format(mode)
             )
-    overwrite = args.get('--overwrite').lower()
+
     if overwrite not in ['hard', 'soft']:
         raise ValueError(
             'Got overwrite: {!r}, expected hard or soft.'.format(overwrite)
@@ -88,6 +94,10 @@ def main():
         makedirs(_PRODUCTION, overwrite)
         copytree(_CONFIG, _PRODUCTION, overwrite=overwrite)
 
+
+def main():
+    args = parse_args()
+    cli(args)
 
 if __name__ == '__main__':
     main()
