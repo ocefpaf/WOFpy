@@ -19,23 +19,22 @@ datatype:
   StandardDeviation:
   - Standard deviation
 
+
 samplemedium:
   Not Relevant:
   - Not applicable
   Other:
+  - Vegetation
   - Rock
   - Regolith
+  - Organism
   - Mineral
+  - Liquid organic
   - Ice
   - Habitat
+  - Gas
+  - Equipment
   Surface water:
   - Liquid aqueous
-  - Liquid organic
   Suspended particulate matter:
   - Particulate
-  Tissue:
-  - Organism
-  Tree:
-  - Vegetation
-  Wellhead Gas:
-  - Gas
