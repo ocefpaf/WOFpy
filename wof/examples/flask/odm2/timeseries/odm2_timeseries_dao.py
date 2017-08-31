@@ -156,8 +156,7 @@ class Odm2Dao(BaseDao):
         l_var_codes = None
         if var_codes is not None:
             if not isinstance(var_codes, list):
-                l_var_codes = []
-                l_var_codes.append(var_codes)
+                l_var_codes = [var_codes]
             else:
                 l_var_codes = var_codes
 
@@ -205,7 +204,6 @@ class Odm2Dao(BaseDao):
                     w_v = model.Variable(v, s, u, t, ti, ag, at)
                     w_v.DataType = self.get_match('datatype', w_v.DataType)
                     w_v.SampleMedium = self.get_match('samplemedium', w_v.SampleMedium)
-
                     v_arr.append(w_v)
 
         return v_arr
@@ -274,7 +272,9 @@ class Odm2Dao(BaseDao):
             r[i].tsrv_EndDateTime = edt_dict[r[i].ResultID]
 
             w_r = model.Series(r[i], aff)
-            w_r.SampleMedium = self.get_match('samplemedium', w_r.SampleMedium)
+            w_r.Variable.DataType = self.get_match('datatype', w_r.Variable.DataType)
+            w_r.Variable.SampleMedium = self.get_match('samplemedium', w_r.Variable.SampleMedium)
+            w_r.SampleMedium = w_r.Variable.SampleMedium
             r_arr.append(w_r)
         return r_arr
 
@@ -314,7 +314,9 @@ class Odm2Dao(BaseDao):
             r[i].tsrv_EndDateTime = edt_dict[r[i].ResultID]
 
             w_r = model.Series(r[i], aff)
-            w_r.SampleMedium = self.get_match('samplemedium', w_r.SampleMedium)
+            w_r.Variable.DataType = self.get_match('datatype', w_r.Variable.DataType)
+            w_r.Variable.SampleMedium = self.get_match('samplemedium', w_r.Variable.SampleMedium)
+            w_r.SampleMedium = w_r.Variable.SampleMedium
             r_arr.append(w_r)
         return r_arr
 
