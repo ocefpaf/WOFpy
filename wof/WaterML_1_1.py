@@ -18,7 +18,7 @@
 #   WOFpy
 #
 
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function)
 
 import sys
 import re
@@ -369,7 +369,6 @@ except ImportError as exp:
 # Globals
 #
 
-ExternalEncoding = 'utf-8' #'ascii'
 Tag_pattern_ = re.compile(r'({.*})?(.*)')
 String_cleanup_pat_ = re.compile(r"[\n\r\s]+")
 Namespace_extract_pat_ = re.compile(r'{(.*)}(.*)')
