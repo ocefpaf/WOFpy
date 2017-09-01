@@ -21,11 +21,11 @@
 from __future__ import (absolute_import, division, print_function)
 
 import sys
-import re as re_
+import re
 import base64
-import datetime as datetime_
-import warnings as warnings_
-from lxml import etree as etree_
+import datetime
+import warnings
+from lxml import etree
 
 
 Validate_simpletypes_ = True
@@ -35,8 +35,8 @@ def parsexml_(infile, parser=None, **kwargs):
     if parser is None:
         # Use the lxml ElementTree compatible parser so that, e.g.,
         #   we ignore comments.
-        parser = etree_.ETCompatXMLParser()
-    doc = etree_.parse(infile, parser=parser, **kwargs)
+        parser = etree.ETCompatXMLParser()
+    doc = etree.parse(infile, parser=parser, **kwargs)
     return doc
 
 #
@@ -51,10 +51,10 @@ try:
 except ImportError as exp:
 
     class GeneratedsSuper(object):
-        tzoff_pattern = re_.compile(r'(\+|-)((0\d|1[0-3]):[0-5]\d|14:00)$')
-        class _FixedOffsetTZ(datetime_.tzinfo):
+        tzoff_pattern = re.compile(r'(\+|-)((0\d|1[0-3]):[0-5]\d|14:00)$')
+        class _FixedOffsetTZ(datetime.tzinfo):
             def __init__(self, offset, name):
-                self.__offset = datetime_.timedelta(minutes=offset)
+                self.__offset = datetime.timedelta(minutes=offset)
                 self.__name = name
             def utcoffset(self, dt):
                 return self.__offset
@@ -193,10 +193,10 @@ except ImportError as exp:
             if len(time_parts) > 1:
                 micro_seconds = int(float('0.' + time_parts[1]) * 1000000)
                 input_data = '%s.%s' % (time_parts[0], micro_seconds, )
-                dt = datetime_.datetime.strptime(
+                dt = datetime.datetime.strptime(
                     input_data, '%Y-%m-%dT%H:%M:%S.%f')
             else:
-                dt = datetime_.datetime.strptime(
+                dt = datetime.datetime.strptime(
                     input_data, '%Y-%m-%dT%H:%M:%S')
             dt = dt.replace(tzinfo=tz)
             return dt
@@ -243,7 +243,7 @@ except ImportError as exp:
                     tz = GeneratedsSuper._FixedOffsetTZ(
                         tzoff, results.group(0))
                     input_data = input_data[:-6]
-            dt = datetime_.datetime.strptime(input_data, '%Y-%m-%d')
+            dt = datetime.datetime.strptime(input_data, '%Y-%m-%d')
             dt = dt.replace(tzinfo=tz)
             return dt.date()
         def gds_validate_time(self, input_data, node=None, input_name=''):
@@ -286,7 +286,7 @@ except ImportError as exp:
             for patterns1 in patterns:
                 found2 = False
                 for patterns2 in patterns1:
-                    if re_.search(patterns2, target) is not None:
+                    if re.search(patterns2, target) is not None:
                         found2 = True
                         break
                 if not found2:
@@ -310,9 +310,9 @@ except ImportError as exp:
                         tzoff, results.group(0))
                     input_data = input_data[:-6]
             if len(input_data.split('.')) > 1:
-                dt = datetime_.datetime.strptime(input_data, '%H:%M:%S.%f')
+                dt = datetime.datetime.strptime(input_data, '%H:%M:%S.%f')
             else:
-                dt = datetime_.datetime.strptime(input_data, '%H:%M:%S')
+                dt = datetime.datetime.strptime(input_data, '%H:%M:%S')
             dt = dt.replace(tzinfo=tz)
             return dt.time()
         def gds_str_lower(self, instring):
@@ -323,7 +323,7 @@ except ImportError as exp:
             path_list.reverse()
             path = '/'.join(path_list)
             return path
-        Tag_strip_pattern_ = re_.compile(r'\{.*\}')
+        Tag_strip_pattern_ = re.compile(r'\{.*\}')
         def get_path_list_(self, node, path_list):
             if node is None:
                 return
@@ -370,10 +370,10 @@ except ImportError as exp:
 #
 
 ExternalEncoding = 'utf-8' #'ascii'
-Tag_pattern_ = re_.compile(r'({.*})?(.*)')
-String_cleanup_pat_ = re_.compile(r"[\n\r\s]+")
-Namespace_extract_pat_ = re_.compile(r'{(.*)}(.*)')
-CDATA_pattern_ = re_.compile(r"<!\[CDATA\[.*?\]\]>", re_.DOTALL)
+Tag_pattern_ = re.compile(r'({.*})?(.*)')
+String_cleanup_pat_ = re.compile(r"[\n\r\s]+")
+Namespace_extract_pat_ = re.compile(r'{(.*)}(.*)')
+CDATA_pattern_ = re.compile(r"<!\[CDATA\[.*?\]\]>", re.DOTALL)
 
 #
 # Support/utility functions.
@@ -549,7 +549,7 @@ class MixedContainer:
                     else:
                         element.text += self.value
         elif self.category == MixedContainer.CategorySimple:
-            subelement = etree_.SubElement(element, '%s' % self.name)
+            subelement = etree.SubElement(element, '%s' % self.name)
             subelement.text = self.to_etree_simple()
         else:    # category == MixedContainer.CategoryComplex
             self.value.to_etree(element)
@@ -827,7 +827,7 @@ class VariableInfoType(GeneratedsSuper):
     def __init__(self, metadataTime=None, oid=None, variableCode=None, variableName=None, variableDescription=None, valueType=None, dataType=None, generalCategory=None, sampleMedium=None, unit=None, options=None, note=None, related=None, extension=None, noDataValue=None, timeScale=None, speciation=None, categories=None, variableProperty=None):
         self.original_tagname_ = None
         if isinstance(metadataTime, basestring):
-            initvalue_ = datetime_.datetime.strptime(metadataTime, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(metadataTime, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = metadataTime
         self.metadataTime = initvalue_
@@ -1322,7 +1322,7 @@ class QueryInfoType(GeneratedsSuper):
     def __init__(self, creationTime=None, queryURL=None, criteria=None, note=None, extension=None):
         self.original_tagname_ = None
         if isinstance(creationTime, basestring):
-            initvalue_ = datetime_.datetime.strptime(creationTime, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(creationTime, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = creationTime
         self.creationTime = initvalue_
@@ -1702,22 +1702,22 @@ class TimePeriodType(GeneratedsSuper):
     def __init__(self, beginDateTime=None, endDateTime=None, beginDateTimeUTC=None, endDateTimeUTC=None, extensiontype_=None):
         self.original_tagname_ = None
         if isinstance(beginDateTime, basestring):
-            initvalue_ = datetime_.datetime.strptime(beginDateTime, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(beginDateTime, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = beginDateTime
         self.beginDateTime = initvalue_
         if isinstance(endDateTime, basestring):
-            initvalue_ = datetime_.datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(endDateTime, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = endDateTime
         self.endDateTime = initvalue_
         if isinstance(beginDateTimeUTC, basestring):
-            initvalue_ = datetime_.datetime.strptime(beginDateTimeUTC, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(beginDateTimeUTC, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = beginDateTimeUTC
         self.beginDateTimeUTC = initvalue_
         if isinstance(endDateTimeUTC, basestring):
-            initvalue_ = datetime_.datetime.strptime(endDateTimeUTC, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(endDateTimeUTC, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = endDateTimeUTC
         self.endDateTimeUTC = initvalue_
@@ -1884,7 +1884,7 @@ class TimeSingleType(TimePeriodType):
         self.original_tagname_ = None
         super(TimeSingleType, self).__init__(beginDateTime, endDateTime, beginDateTimeUTC, endDateTimeUTC, )
         if isinstance(timeSingle, basestring):
-            initvalue_ = datetime_.datetime.strptime(timeSingle, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(timeSingle, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = timeSingle
         self.timeSingle = initvalue_
@@ -2117,16 +2117,16 @@ class LatLonPointType(GeogLocationType):
         # Validate type Latitude, a restriction on xsi:double.
         if value is not None and Validate_simpletypes_:
             if float(value) < -90.00:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on Latitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on Latitude' % {"value" : value} )
             if float(value) > 90.00:
-                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Latitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Latitude' % {"value" : value} )
     def validate_Longitude(self, value):
         # Validate type Longitude, a restriction on xsi:double.
         if value is not None and Validate_simpletypes_:
             if float(value) < -180.00:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on Longitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on Longitude' % {"value" : value} )
             if float(value) > 180.00:
-                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Longitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Longitude' % {"value" : value} )
     def hasContent_(self):
         if (
             self.latitude is not None or
@@ -2236,16 +2236,16 @@ class LatLonBoxType(GeogLocationType):
         # Validate type Latitude, a restriction on xsi:double.
         if value is not None and Validate_simpletypes_:
             if float(value) < -90.00:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on Latitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on Latitude' % {"value" : value} )
             if float(value) > 90.00:
-                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Latitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Latitude' % {"value" : value} )
     def validate_Longitude(self, value):
         # Validate type Longitude, a restriction on xsi:double.
         if value is not None and Validate_simpletypes_:
             if float(value) < -180.00:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on Longitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on Longitude' % {"value" : value} )
             if float(value) > 180.00:
-                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Longitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Longitude' % {"value" : value} )
     def hasContent_(self):
         if (
             self.south is not None or
@@ -2467,16 +2467,16 @@ class CoordType(GeneratedsSuper):
         # Validate type Latitude, a restriction on xsi:double.
         if value is not None and Validate_simpletypes_:
             if float(value) < -90.00:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on Latitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on Latitude' % {"value" : value} )
             if float(value) > 90.00:
-                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Latitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Latitude' % {"value" : value} )
     def validate_Longitude(self, value):
         # Validate type Longitude, a restriction on xsi:double.
         if value is not None and Validate_simpletypes_:
             if float(value) < -180.00:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on Longitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on Longitude' % {"value" : value} )
             if float(value) > 180.00:
-                warnings_.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Longitude' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd maxInclusive restriction on Longitude' % {"value" : value} )
     def hasContent_(self):
         if (
             self.latitude is not None or
@@ -2729,7 +2729,7 @@ class QualifierType(GeneratedsSuper):
         # Validate type positiveInt, a restriction on xsi:int.
         if value is not None and Validate_simpletypes_:
             if value < 0:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
     def hasContent_(self):
         if (
             self.qualifierCode is not None or
@@ -2816,7 +2816,7 @@ class QualifierType(GeneratedsSuper):
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'qualifierCode':
             qualifierCode_ = child_.text
-            qualifierCode_ = re_.sub(String_cleanup_pat_, " ", qualifierCode_).strip()
+            qualifierCode_ = re.sub(String_cleanup_pat_, " ", qualifierCode_).strip()
             qualifierCode_ = self.gds_validate_string(qualifierCode_, node, 'qualifierCode')
             self.qualifierCode = qualifierCode_
         elif nodeName_ == 'qualifierDescription':
@@ -3039,7 +3039,7 @@ class ValueSingleVariable(GeneratedsSuper):
         self.qualityControlLevelCode = _cast(None, qualityControlLevelCode)
         self.methodID = _cast(int, methodID)
         if isinstance(metadataTime, basestring):
-            initvalue_ = datetime_.datetime.strptime(metadataTime, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(metadataTime, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = metadataTime
         self.metadataTime = initvalue_
@@ -3050,13 +3050,13 @@ class ValueSingleVariable(GeneratedsSuper):
         self.accuracyStdDev = _cast(float, accuracyStdDev)
         self.offsetTypeID = _cast(int, offsetTypeID)
         if isinstance(dateTime, basestring):
-            initvalue_ = datetime_.datetime.strptime(dateTime, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(dateTime, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = dateTime
         self.dateTime = initvalue_
         self.offsetTypeCode = _cast(None, offsetTypeCode)
         if isinstance(dateTimeUTC, basestring):
-            initvalue_ = datetime_.datetime.strptime(dateTimeUTC, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(dateTimeUTC, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = dateTimeUTC
         self.dateTimeUTC = initvalue_
@@ -3122,7 +3122,7 @@ class ValueSingleVariable(GeneratedsSuper):
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_TimeOffsetType_patterns_, value):
-                warnings_.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_TimeOffsetType_patterns_, ))
+                warnings.warn('Value "%s" does not match xsd pattern restrictions: %s' % (value.encode('utf-8'), self.validate_TimeOffsetType_patterns_, ))
     validate_TimeOffsetType_patterns_ = [['^^[+-][01]\\d:[0-5]\\d$']]
     def hasContent_(self):
         if (
@@ -3720,7 +3720,7 @@ class UnitsType(GeneratedsSuper):
             self.unitAbbreviation = unitAbbreviation_
         elif nodeName_ == 'unitCode':
             unitCode_ = child_.text
-            unitCode_ = re_.sub(String_cleanup_pat_, " ", unitCode_).strip()
+            unitCode_ = re.sub(String_cleanup_pat_, " ", unitCode_).strip()
             unitCode_ = self.gds_validate_string(unitCode_, node, 'unitCode')
             self.unitCode = unitCode_
 # end class UnitsType
@@ -3753,7 +3753,7 @@ class MethodType(GeneratedsSuper):
         # Validate type positiveInt, a restriction on xsi:int.
         if value is not None and Validate_simpletypes_:
             if value < 0:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
     def hasContent_(self):
         if (
             self.methodCode is not None or
@@ -3818,7 +3818,7 @@ class MethodType(GeneratedsSuper):
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'methodCode':
             methodCode_ = child_.text
-            methodCode_ = re_.sub(String_cleanup_pat_, " ", methodCode_).strip()
+            methodCode_ = re.sub(String_cleanup_pat_, " ", methodCode_).strip()
             methodCode_ = self.gds_validate_string(methodCode_, node, 'methodCode')
             self.methodCode = methodCode_
         elif nodeName_ == 'methodDescription':
@@ -4050,7 +4050,7 @@ class LabMethodType(GeneratedsSuper):
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'labCode':
             labCode_ = child_.text
-            labCode_ = re_.sub(String_cleanup_pat_, " ", labCode_).strip()
+            labCode_ = re.sub(String_cleanup_pat_, " ", labCode_).strip()
             labCode_ = self.gds_validate_string(labCode_, node, 'labCode')
             self.labCode = labCode_
         elif nodeName_ == 'labName':
@@ -4226,7 +4226,7 @@ class SourceType(GeneratedsSuper):
         # Validate type positiveInt, a restriction on xsi:int.
         if value is not None and Validate_simpletypes_:
             if value < 0:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
     def hasContent_(self):
         if (
             self.sourceCode is not None or
@@ -4307,7 +4307,7 @@ class SourceType(GeneratedsSuper):
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'sourceCode':
             sourceCode_ = child_.text
-            sourceCode_ = re_.sub(String_cleanup_pat_, " ", sourceCode_).strip()
+            sourceCode_ = re.sub(String_cleanup_pat_, " ", sourceCode_).strip()
             sourceCode_ = self.gds_validate_string(sourceCode_, node, 'sourceCode')
             self.sourceCode = sourceCode_
         elif nodeName_ == 'organization':
@@ -4605,9 +4605,9 @@ class QualityControlLevelType(GeneratedsSuper):
         # Validate type definitionType, a restriction on xsi:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 255:
-                warnings_.warn('Value "%(value)s" does not match xsd maxLength restriction on definitionType' % {"value" : value.encode("utf-8")} )
+                warnings.warn('Value "%(value)s" does not match xsd maxLength restriction on definitionType' % {"value" : value.encode("utf-8")} )
             if len(value) < 0:
-                warnings_.warn('Value "%(value)s" does not match xsd minLength restriction on definitionType' % {"value" : value.encode("utf-8")} )
+                warnings.warn('Value "%(value)s" does not match xsd minLength restriction on definitionType' % {"value" : value.encode("utf-8")} )
     def hasContent_(self):
         if (
             self.qualityControlLevelCode is not None or
@@ -4671,7 +4671,7 @@ class QualityControlLevelType(GeneratedsSuper):
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'qualityControlLevelCode':
             qualityControlLevelCode_ = child_.text
-            qualityControlLevelCode_ = re_.sub(String_cleanup_pat_, " ", qualityControlLevelCode_).strip()
+            qualityControlLevelCode_ = re.sub(String_cleanup_pat_, " ", qualityControlLevelCode_).strip()
             qualityControlLevelCode_ = self.gds_validate_string(qualityControlLevelCode_, node, 'qualityControlLevelCode')
             self.qualityControlLevelCode = qualityControlLevelCode_
         elif nodeName_ == 'definition':
@@ -4723,7 +4723,7 @@ class OffsetType(GeneratedsSuper):
         # Validate type positiveInt, a restriction on xsi:int.
         if value is not None and Validate_simpletypes_:
             if value < 0:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
     def hasContent_(self):
         if (
             self.offsetTypeCode is not None or
@@ -4800,7 +4800,7 @@ class OffsetType(GeneratedsSuper):
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'offsetTypeCode':
             offsetTypeCode_ = child_.text
-            offsetTypeCode_ = re_.sub(String_cleanup_pat_, " ", offsetTypeCode_).strip()
+            offsetTypeCode_ = re.sub(String_cleanup_pat_, " ", offsetTypeCode_).strip()
             offsetTypeCode_ = self.gds_validate_string(offsetTypeCode_, node, 'offsetTypeCode')
             self.offsetTypeCode = offsetTypeCode_
         elif nodeName_ == 'offsetValue':
@@ -4965,7 +4965,7 @@ class siteCodeType(GeneratedsSuper):
         # Validate type positiveInt, a restriction on xsi:int.
         if value is not None and Validate_simpletypes_:
             if value < 0:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
     def hasContent_(self):
         if (
             self.valueOf_
@@ -5507,7 +5507,7 @@ class variableCodeType(GeneratedsSuper):
         # Validate type positiveInt, a restriction on xsi:int.
         if value is not None and Validate_simpletypes_:
             if value < 0:
-                warnings_.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
+                warnings.warn('Value "%(value)s" does not match xsd minInclusive restriction on positiveInt' % {"value" : value} )
     def hasContent_(self):
         if (
             self.valueOf_
@@ -6317,13 +6317,13 @@ class timeParamType(GeneratedsSuper):
         pass
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         if nodeName_ == 'beginDateTime':
-            beginDateTime_ = child_.text
-            beginDateTime_ = self.gds_validate_string(beginDateTime_, node, 'beginDateTime')
-            self.beginDateTime = beginDateTime_
+            begindatetime = child_.text
+            begindatetime = self.gds_validate_string(begindatetime, node, 'beginDateTime')
+            self.beginDateTime = begindatetime
         elif nodeName_ == 'endDateTime':
-            endDateTime_ = child_.text
-            endDateTime_ = self.gds_validate_string(endDateTime_, node, 'endDateTime')
-            self.endDateTime = endDateTime_
+            enddatetime = child_.text
+            enddatetime = self.gds_validate_string(enddatetime, node, 'endDateTime')
+            self.endDateTime = enddatetime
 # end class timeParamType
 
 
@@ -7221,7 +7221,7 @@ class SiteInfoType(SourceInfoType):
         self.original_tagname_ = None
         super(SiteInfoType, self).__init__()
         if isinstance(metadataTime, basestring):
-            initvalue_ = datetime_.datetime.strptime(metadataTime, '%Y-%m-%dT%H:%M:%S')
+            initvalue_ = datetime.datetime.strptime(metadataTime, '%Y-%m-%dT%H:%M:%S')
         else:
             initvalue_ = metadataTime
         self.metadataTime = initvalue_
@@ -7569,7 +7569,7 @@ def parseEtree(inFileName, silence=False):
     rootElement = rootObj.to_etree(None, name_=rootTag, mapping_=mapping)
     reverse_mapping = rootObj.gds_reverse_node_mapping(mapping)
     if not silence:
-        content = etree_.tostring(
+        content = etree.tostring(
             rootElement, pretty_print=True,
             xml_declaration=True, encoding="utf-8")
         sys.stdout.write(content)
