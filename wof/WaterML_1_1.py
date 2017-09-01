@@ -3122,7 +3122,7 @@ class ValueSingleVariable(GeneratedsSuper):
         if value is not None and Validate_simpletypes_:
             if not self.gds_validate_simple_patterns(
                     self.validate_TimeOffsetType_patterns_, value):
-                warnings.warn(u'Value "%s" does not match xsd pattern restrictions: %s' % (value.encode(u'utf-8'), self.validate_TimeOffsetType_patterns_, ))
+                warnings.warn(u'Value "%s" does not match xsd pattern restrictions: %s' % (value, self.validate_TimeOffsetType_patterns_, ))
     validate_TimeOffsetType_patterns_ = [['^^[+-][01]\\d:[0-5]\\d$']]
     def hasContent_(self):
         if (
@@ -4605,9 +4605,9 @@ class QualityControlLevelType(GeneratedsSuper):
         # Validate type definitionType, a restriction on xsi:string.
         if value is not None and Validate_simpletypes_:
             if len(value) > 255:
-                warnings.warn(u'Value "%(value)s" does not match xsd maxLength restriction on definitionType' % {"value" : value.encode("utf-8")} )
+                warnings.warn(u'Value "%(value)s" does not match xsd maxLength restriction on definitionType' % {"value" : value} )
             if len(value) < 0:
-                warnings.warn(u'Value "%(value)s" does not match xsd minLength restriction on definitionType' % {"value" : value.encode("utf-8")} )
+                warnings.warn(u'Value "%(value)s" does not match xsd minLength restriction on definitionType' % {"value" : value} )
     def hasContent_(self):
         if (
             self.qualityControlLevelCode is not None or
