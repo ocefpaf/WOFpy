@@ -170,8 +170,8 @@ wofpyserverdev
     # Edit this to same name above
     Vocabulary: MySQLODM2Timeseries
     Menu_Group_Name: ODM2
-    # Assumes we are using port 8080
-    Service_WSDL: http://127.0.0.1:8080/soap/wateroneflow.wsdl 
+    # Change this to your configuration
+    Service_WSDL: http://serverip:port/networkcode/soap/cuahsi_1_0/.wsdl 
     Timezone: 00:00
     TimezoneAbbreviation: GMT
     
@@ -183,8 +183,8 @@ wofpyserverdev
     EndDate: 2007-09-01T02:30:00
 
     [WOF_1_1]
-    # Assumes we are using port 8080
-    Service_WSDL: http://127.0.0.1:8080/soap/wateroneflow_1_1.wsdl 
+    # Change this to your configuration
+    Service_WSDL: http://serverip:port/networkcode/soap/cuahsi_1_1/.wsdl 
     
     # Also Testing parameters (for WOF ver. 1.1)
     [Default_Params_1_1]
