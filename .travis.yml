@@ -2,6 +2,9 @@ language: python
 
 sudo: false
 
+services:
+  - postgresql
+
 matrix:
   fast_finish: true
   include:
