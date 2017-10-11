@@ -405,7 +405,7 @@ def quote_xml(inStr):
 
 
 def quote_xml_aux(inStr):
-    inStr = inStr.decode('utf-8')
+    inStr = inStr.encode('utf-8').decode('utf-8')
     s1 = inStr.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
     s1 = s1.replace('>', '&gt;')
@@ -4986,8 +4986,8 @@ class siteCodeType(GeneratedsSuper):
         self.exportAttributes(outfile, level, already_processed, namespace_, name_='siteCodeType')
         if self.hasContent_():
             outfile.write(u'>')
-            outfile.write(u''.format(self.valueOf_))
-            self.exportChildren(outfile, level + 1, namespace_=u'', name_=u'siteCodeType', pretty_print=pretty_print)
+            outfile.write(u'{}'.format(self.valueOf_))
+            self.exportChildren(outfile, level + 1, namespace_='', name_='siteCodeType', pretty_print=pretty_print)
             outfile.write(u'</%s%s>%s' % (namespace_, name_, eol_))
         else:
             outfile.write(u'/>%s' % (eol_, ))

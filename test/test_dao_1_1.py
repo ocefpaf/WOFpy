@@ -121,7 +121,7 @@ test_sites = {
     'SITE_N': TestSite(
         SiteID=4,
         SiteCode='SITE_N',
-        SiteName='Site ñ',
+        SiteName=u'Site ñ',
         Latitude=59,
         Longitude=20)
     }
@@ -131,7 +131,7 @@ test_units = {
         UnitsID=96,
         UnitsName='degree celsius',
         UnitsType='Temperature',
-        UnitsAbbreviation='°C'),
+        UnitsAbbreviation=u'°C'),
     100: TestUnits(
         UnitsID=100,
         UnitsName='second',
@@ -225,7 +225,7 @@ test_methods = {
         MethodLink=None),
     27: TestMethod(
         MethodID=27,
-        MethodDescription='Coge la muestra del árbol.',
+        MethodDescription=u'Coge la muestra del árbol.',
         MethodLink=None)
     }
 
@@ -240,7 +240,7 @@ test_metadata = {
     2: TestMetadata(
             MetadataID=2,
             TopicCategory='inlandWaters',
-            Title='El océano',
+            Title=u'El océano',
             Abstract='Algunos resumen sobre el océano.',
             ProfileVersion='Unknown',
             MetadataLink='http://www.unknown.edu')
@@ -263,7 +263,7 @@ test_sources = {
         Metadata=test_metadata[1]),
     2: TestSource(
             SourceID=2,
-            Organization='Université Pierre et Marie Curie',
+            Organization=u'Université Pierre et Marie Curie',
             SourceDescription='Public research university and was established in 1971',
             SourceLink='http://www.upmc.fr/en/',
             ContactName='Snarf',
