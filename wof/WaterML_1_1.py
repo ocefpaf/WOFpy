@@ -4279,7 +4279,8 @@ class SourceType(GeneratedsSuper):
         if self.metadata is not None:
             self.metadata.export(outfile, level, namespace_, name_='metadata', pretty_print=pretty_print)
         for contactInformation_ in self.contactInformation:
-            contactInformation_.export(outfile, level, namespace_, name_='contactInformation', pretty_print=pretty_print)
+            if contactInformation_ is not None:
+                contactInformation_.export(outfile, level, namespace_, name_='contactInformation', pretty_print=pretty_print)
         #for sourceLink_ in self.sourceLink:
         if self.sourceLink is not None:
             showIndent(outfile, level, pretty_print)
