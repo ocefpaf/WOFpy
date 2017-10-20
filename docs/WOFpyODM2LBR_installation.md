@@ -235,7 +235,9 @@ cd $HOME/wofpyserverdev
 3. Edit `singlerunserver.py` to use the mysql config file.
 
 	```python
-	dao = Odm2Dao(get_connection('odm2_config_mysql.cfg'))
+	parser.add_argument('--config',
+                    help='Configuration file',
+                    default='odm2_config_mysql.cfg')
 	```
 3. Test that `singlerunserver.py` will deploy WOFpy. Go to one of the endpoints provided, replacing `127.0.0.1` with your server ipaddress:
 
