@@ -50,6 +50,7 @@ class WOF_1_1(object):
 
         self.network = config.network.lower()
         self.vocabulary = config.vocabulary.lower()
+        self.urlpath = config.urlpath.lower()
         self.menu_group_name = config.menu_group_name
         self.service_wsdl = config.service_wsdl
         self.timezone = config.timezone
