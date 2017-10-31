@@ -31,8 +31,8 @@ def create_app(wof_inst, wof_inst_1_1, soap_service_url=None, soap_service_1_1_u
     #
     # app.config.from_object(config.Config)
     app = create_simple_app()
-    path = wof_inst.network.lower()
-    servicesPath =  '/'+wof_inst.network.lower()
+    path = wof_inst.urlpath.lower()
+    servicesPath =  '/'+wof_inst.urlpath.lower()
     add_flask_routes(app,path,servicesPath,wof_inst,
                      wof_inst_1_1,soap_service_url=soap_service_url, soap_service_1_1_url=soap_service_1_1_url )
     return app
@@ -56,22 +56,22 @@ def add_flask_routes(app,path, servicesPath,
                                rest2=path+'/rest_2/',
                                soap10=path+'/soap/cuahsi_1_0/',
                                soap11=path+'/soap/cuahsi_1_1/',
-                               p=wof_inst.network,
+                               p=wof_inst.urlpath,
                                v=version)
 
-    app.add_url_rule(servicesPath+'/', wof_inst.network+'index', index)
+    app.add_url_rule(servicesPath+'/', wof_inst.urlpath+'index', index)
 
     def index_2_0():
         return render_template('index_2.html',
                        path= path + '/rest/2/',
-                       p=wof_inst.network,
+                       p=wof_inst.urlpath,
                        s=wof_inst.default_site,
                        v=wof_inst.default_variable,
                        sd=wof_inst.default_start_date,
                        ed=wof_inst.default_end_date,
                        u=wof_inst.default_unitid,
                        sm=wof_inst.default_samplemedium)
-    app.add_url_rule(servicesPath+'/rest_2/', wof_inst.network+'index_2_0', index_2_0)
+    app.add_url_rule(servicesPath+'/rest_2/', wof_inst.urlpath+'index_2_0', index_2_0)
 
     if wof_inst is not None:
         if not 'SOAP_SERVICE_URL' in app.config and soap_service_url:
@@ -81,14 +81,14 @@ def add_flask_routes(app,path, servicesPath,
         def index_1_0():
             return render_template('index_1_0.html',
                            path= path + '/rest/1_0/',
-                           p=wof_inst.network,
+                           p=wof_inst.urlpath,
                            s=wof_inst.default_site,
                            v=wof_inst.default_variable,
                            sd=wof_inst.default_start_date,
                            ed=wof_inst.default_end_date,
                            u=wof_inst.default_unitid,
                            sm=wof_inst.default_samplemedium)
-        app.add_url_rule(servicesPath+'/rest_1_0/',wof_inst.network+ 'index_1_0', index_1_0)
+        app.add_url_rule(servicesPath+'/rest_1_0/',wof_inst.urlpath+ 'index_1_0', index_1_0)
 
 
 
@@ -130,7 +130,7 @@ def add_flask_routes(app,path, servicesPath,
                            so=wof_inst_1_1.default_south,
                            n=wof_inst_1_1.default_north,
                            e=wof_inst_1_1.default_east)
-        app.add_url_rule(servicesPath+'/rest_1_1/', wof_inst.network+'index_1_1', index_1_1)
+        app.add_url_rule(servicesPath+'/rest_1_1/', wof_inst.urlpath+'index_1_1', index_1_1)
 
         #@app.route('/soap/wateroneflow_1_1.wsdl')
         # def get_wsdl_1_1():
@@ -210,9 +210,8 @@ def create_wof_flask_multiple(wofConfig=[], templates=None):
         wof_obj_1_1 = wof_1_1.WOF_1_1(wConf.dao,wConf.config,templates)
 
         spyneapps.update(getSpyneApplications(wof_obj_1_0,wof_obj_1_1,templates) )
-        path = wof_obj_1_0.network.lower()
-        servicesPath =  '/'+wof_obj_1_0.network.lower()
-
+        path = wof_obj_1_0.urlpath.lower()
+        servicesPath =  '/'+wof_obj_1_0.urlpath.lower()
         wof.flask.add_flask_routes(app,path, servicesPath,
                      wof_obj_1_0,
                      wof_obj_1_1,

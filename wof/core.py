@@ -116,6 +116,10 @@ class WOFConfig(object):
                 self.vocabulary = config.get('WOF_1_1', 'Vocabulary')
             else:
                 self.vocabulary = config.get('WOF', 'Vocabulary')
+            if config.has_option('WOF_1_1', 'URLPATH'):
+                self.urlpath = config.get('WOF_1_1', 'URLPATH')
+            else:
+                self.urlpath = config.get('WOF', 'URLPATH')
             if config.has_option('WOF_1_1', 'Menu_Group_Name'):
                 self.menu_group_name = config.get('WOF_1_1', 'Menu_Group_Name')
             else:
@@ -263,7 +267,7 @@ def getSpyneApplications(wof_obj_1_0, wof_obj_1_1, templates=None):
     # wof_obj_1_0 = wof_1_0.WOF(dao, config_file)
     # wof_obj_1_1 = wof_1_1.WOF_1_1(dao,config_file)
 
-    sensorNetwork = wof_obj_1_0.network.replace('/', '').lower()
+    sensorNetwork = wof_obj_1_0.urlpath.replace('/', '').lower()
 
     soap_app_1_0 = Application(
         [wml10(wof_obj_1_0, Unicode, _SERVICE_PARAMS["s_type"])],
