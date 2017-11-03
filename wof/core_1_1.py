@@ -560,7 +560,8 @@ class WOF_1_1(object):
                 unitID=offsetTypeResult.OffsetUnits.UnitsID,
                 unitAbbreviation=offsetTypeResult.OffsetUnits.UnitsAbbreviation,  # noqa
                 unitName=offsetTypeResult.OffsetUnits.UnitsName,
-                unitType=offsetTypeResult.OffsetUnits.UnitsType
+                unitType=offsetTypeResult.OffsetUnits.UnitsType,
+                unitCode=offsetTypeResult.OffsetUnits.UnitsID
             )
 
             offset.units = units
@@ -870,6 +871,7 @@ class WOF_1_1(object):
 
         if variableResult.VariableUnits:
             units = WaterML.UnitsType(
+                unitID=variableResult.VariableUnitsID,
                 unitAbbreviation=variableResult.VariableUnits.UnitsAbbreviation,  # noqa
                 unitCode=variableResult.VariableUnitsID,
                 unitType=clean_variableUnitsType,
@@ -886,7 +888,8 @@ class WOF_1_1(object):
                 unitName=variableResult.TimeUnits.UnitsName,
                 unitDescription=variableResult.TimeUnits.UnitsName,
                 unitType=variableResult.TimeUnits.UnitsType,
-                unitAbbreviation=variableResult.TimeUnits.UnitsAbbreviation)
+                unitAbbreviation=variableResult.TimeUnits.UnitsAbbreviation,
+                unitCode=variableResult.TimeUnits.UnitsID)
 
             timeSupport.set_unit(timeUnits)
 
