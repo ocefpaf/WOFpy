@@ -69,6 +69,16 @@ class WOF(object):
         self.default_unitid = config.default_unitid
         self.default_samplemedium = config.default_samplemedium
 
+        self.organization = config.organization
+        self.address = config.address
+        self.city = config.city
+        self.state = config.state
+        self.zipcode = config.zipcode
+        self.contactname = config.contactname
+        self.contactemail = config.contactemail
+        self.phone = config.phone
+        self.link = config.link
+
     '''
     For WML 1.0 many terms were embedded in the Schemas,
     which made them not expandable. This provides a standard warning message
