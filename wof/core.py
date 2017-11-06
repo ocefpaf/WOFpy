@@ -104,6 +104,16 @@ class WOFConfig(object):
         default_east = None
 
 
+        organization = 'MYORGANIZATION'
+        address = '1234 DriveIn'
+        city = 'Seattle'
+        state = 'Washington'
+        zipcode = '98064'
+        contactname = 'John Smith'
+        contactemail = 'johnsmith@example.com'
+        phone = '555-555-555'
+        link = 'http://www.example.com/'
+
         def __init__(self, file_name, templates=None):
             config = configparser.RawConfigParser()
             config.read(file_name)

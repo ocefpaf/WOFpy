@@ -31,6 +31,16 @@ class WOF_1_1(object):
     default_north = None
     default_east = None
 
+    organization = 'MYORGANIZATION'
+    address = '1234 DriveIn'
+    city = 'Seattle'
+    state = 'Washington'
+    zipcode = '98064'
+    contactname = 'John Smith'
+    contactemail = 'johnsmith@example.com'
+    phone = '555-555-555'
+    link = 'http://www.example.com/'
+
     _config = None
     _templates = None
 

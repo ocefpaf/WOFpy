@@ -56,21 +56,42 @@ def add_flask_routes(app,path, servicesPath,
                                rest2=path+'/rest_2/',
                                soap10=path+'/soap/cuahsi_1_0/',
                                soap11=path+'/soap/cuahsi_1_1/',
-                               p=wof_inst.urlpath,
-                               v=version)
+                               p=wof_inst.network,
+                               urlpath=wof_inst.urlpath,
+                               ver=version,
+                               organization=wof_inst_1_1.organization,
+                               address=wof_inst_1_1.address,
+                               city=wof_inst_1_1.city,
+                               state=wof_inst_1_1.state,
+                               zipcode=wof_inst_1_1.zipcode,
+                               contactname=wof_inst_1_1.contactname,
+                               contactemail=wof_inst_1_1.contactemail,
+                               phone=wof_inst_1_1.phone,
+                               link=wof_inst_1_1.link)
 
     app.add_url_rule(servicesPath+'/', wof_inst.urlpath+'index', index)
 
     def index_2_0():
         return render_template('index_2.html',
                        path= path + '/rest/2/',
-                       p=wof_inst.urlpath,
+                       p=wof_inst.network,
+                       urlpath=wof_inst.urlpath,
                        s=wof_inst.default_site,
                        v=wof_inst.default_variable,
                        sd=wof_inst.default_start_date,
                        ed=wof_inst.default_end_date,
                        u=wof_inst.default_unitid,
-                       sm=wof_inst.default_samplemedium)
+                       sm=wof_inst.default_samplemedium,
+                       ver=version,
+                       organization=wof_inst.organization,
+                       address=wof_inst.address,
+                       city=wof_inst.city,
+                       state=wof_inst.state,
+                       zipcode=wof_inst.zipcode,
+                       contactname=wof_inst.contactname,
+                       contactemail=wof_inst.contactemail,
+                       phone=wof_inst.phone,
+                       link=wof_inst.link)
     app.add_url_rule(servicesPath+'/rest_2/', wof_inst.urlpath+'index_2_0', index_2_0)
 
     if wof_inst is not None:
@@ -81,13 +102,24 @@ def add_flask_routes(app,path, servicesPath,
         def index_1_0():
             return render_template('index_1_0.html',
                            path= path + '/rest/1_0/',
-                           p=wof_inst.urlpath,
+                           p=wof_inst.network,
+                           urlpath=wof_inst.urlpath,
                            s=wof_inst.default_site,
                            v=wof_inst.default_variable,
                            sd=wof_inst.default_start_date,
                            ed=wof_inst.default_end_date,
                            u=wof_inst.default_unitid,
-                           sm=wof_inst.default_samplemedium)
+                           sm=wof_inst.default_samplemedium,
+                           ver=version,
+                           organization=wof_inst.organization,
+                           address=wof_inst.address,
+                           city=wof_inst.city,
+                           state=wof_inst.state,
+                           zipcode=wof_inst.zipcode,
+                           contactname=wof_inst.contactname,
+                           contactemail=wof_inst.contactemail,
+                           phone=wof_inst.phone,
+                           link=wof_inst.link)
         app.add_url_rule(servicesPath+'/rest_1_0/',wof_inst.urlpath+ 'index_1_0', index_1_0)
 
 
@@ -121,6 +153,7 @@ def add_flask_routes(app,path, servicesPath,
         def index_1_1():
             return render_template('index_1_1.html',
                            path=path+'/rest/1_1/',
+                           urlpath=wof_inst.urlpath,
                            p=wof_inst_1_1.network,
                            s=wof_inst_1_1.default_site,
                            v=wof_inst_1_1.default_variable,
@@ -129,7 +162,17 @@ def add_flask_routes(app,path, servicesPath,
                            w=wof_inst_1_1.default_west,
                            so=wof_inst_1_1.default_south,
                            n=wof_inst_1_1.default_north,
-                           e=wof_inst_1_1.default_east)
+                           e=wof_inst_1_1.default_east,
+                           ver=version,
+                           organization=wof_inst_1_1.organization,
+                           address=wof_inst_1_1.address,
+                           city=wof_inst_1_1.city,
+                           state=wof_inst_1_1.state,
+                           zipcode=wof_inst_1_1.zipcode,
+                           contactname=wof_inst_1_1.contactname,
+                           contactemail=wof_inst_1_1.contactemail,
+                           phone=wof_inst_1_1.phone,
+                           link=wof_inst_1_1.link)
         app.add_url_rule(servicesPath+'/rest_1_1/', wof_inst.urlpath+'index_1_1', index_1_1)
 
         #@app.route('/soap/wateroneflow_1_1.wsdl')

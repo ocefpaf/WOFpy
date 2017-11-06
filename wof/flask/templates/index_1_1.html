@@ -1,69 +1,256 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>WaterOneFlow 1.1 in Python</title>
+    <meta charset="UTF-8">
+    <title>WaterML 1.1 | WaterOneFlow in Python</title>
+    <style type="text/css">
+        /* WOFpy Inline Stylesheet */
+        /* Last updated 11/6/2017 */
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-family: sans-serif;
+        }
+
+        /* DIV Containers */
+
+        .container-fluid {
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+            background-color: white;
+        }
+
+        @media (min-width: 768px) {
+            .container-fluid {
+                width: 750px;
+            }
+        }
+        @media (min-width: 992px) {
+            .container-fluid {
+                width: 970px;
+            }
+        }
+
+        .content {
+            min-height: 80%;
+        }
+
+
+        /* Titles for Services */
+        .service-title {
+            margin: 10px 0 10px 0;
+        }
+
+        .underline {
+            border-bottom: 2px solid #3F4448;
+            display: inline-block;
+            padding-right: 20px;
+            margin: 0;
+        }
+
+
+        /* Header navbar */
+        .navbar {
+            background-color: #2A88B8;
+            position: relative;
+            min-height: 5%;
+            z-index: 1000;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .navbar > .container-fluid > h1 {
+            margin: 10px 0 10px 0;
+            color: white;
+            display: inline-block;
+        }
+
+        .navbar > .container-fluid {
+            background-color: inherit;
+        }
+
+        #head-title a{
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Footer */
+
+        .footer {
+            position: relative;
+            background-color: #2A88B8;
+            color: white;
+            min-height: 5%;
+            z-index: 1000;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        .footer > .container-fluid > h3 {
+            margin: 10px 0 10px 0;
+            color: white;
+        }
+
+        .footer > .container-fluid {
+            background-color: inherit;
+        }
+
+        /* Warning Banner */
+        .banner {
+            padding: 5px;
+            background-color: #FFEEF0;
+            margin-bottom: 10px;
+        }
+
+        /* Development Services */
+        .development {
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            background-color: #3F4448;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -60px;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #3F4448 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+    </style>
 </head>
 <body>
-	<p>Visit one of these pages to obtain {{p}} observations data and metadata from the REST API for WOF written in Python:</p>
-	
-	<ul>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetSites">
-                        GetSites
-                    </a>
-                </li>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetSites?site={{p}}:{{s}}">
-                        GetSites?site={{p}}:{{s}}
-                    </a>
-                </li>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetSitesByBox?west={{w}}&south={{ so }}&east={{ e }}&north={{ n }}&IncludeSeries=false">
-                        GetSitesByBox?west={{w}}&south={{ so }}&east={{ e }}&north={{ n }}&IncludeSeries=false
-                    </a>
-                </li>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetSiteInfo?site={{p}}:{{s}}">
-                        GetSiteInfo?site={{p}}:{{s}}
-                    </a>
-                </li>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetSiteInfoMultple?site={{p}}:{{s}}">
-                        GetSiteInfoMultple?site={{p}}:{{s}}
-                    </a>
-                </li>
-        <li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetVariables">
-                        GetVariables
-                    </a>
-                </li>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetVariableInfo">
-                        GetVariableInfo
-                    </a>
-                </li>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetVariableInfo?variable={{p}}:{{v}}">
-                        GetVariableInfo?variable={{p}}:{{v}}
-                    </a>
-                </li>
-		<li>
-                    <a href="{{request.script_root|safe}}/{{ path }}GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}">
-                        GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}
-                    </a> Note: May crash browser for large values sets.
-                </li>
-		<li>
-			<a href="{{request.script_root|safe}}/{{ path }}GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}&startDate={{sd}}&endDate={{ed}}">
-				GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}&startDate={{sd}}&endDate={{ed}}
-			</a>
-		</li>
-        <li>
-			<a href="{{request.script_root|safe}}/{{ path }}GetValuesForASite?site={{p}}:{{s}}&startDate={{sd}}&endDate={{ed}}">
-				GetValuesForASite?site={{p}}:{{s}}&startDate={{sd}}&endDate={{ed}}
-			</a>
-		</li>
+<div class="navbar">
+    <div class="container-fluid">
+        <h1 id="head-title"><a href="/{{ urlpath }}/">{{ organization }} WOFPy</a></h1>
+    </div>
+</div>
+<div class="container-fluid content">
 
+    <h2>WaterML 1.1 REST Service Endpoint Examples</h2>
 
-	</ul>
+    <p>Visit one of these pages to obtain {{ p }} observations data and metadata from the REST API for WOF written in
+        Python:</p>
+
+    <h3 class="underline">Sites</h3>
+    <ul>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetSites">
+                GetSites
+            </a>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetSites?site={{p}}:{{s}}">
+                GetSites?site={{p}}:{{s}}
+            </a>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetSitesByBox?west={{w}}&south={{ so }}&east={{ e }}&north={{ n }}&IncludeSeries=false">
+                GetSitesByBox?west={{w}}&south={{ so }}&east={{ e }}&north={{ n }}&IncludeSeries=false
+            </a>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetSiteInfo?site={{p}}:{{s}}">
+                GetSiteInfo?site={{p}}:{{s}}
+            </a>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetSiteInfoMultple?site={{p}}:{{s}}">
+                GetSiteInfoMultple?site={{p}}:{{s}}
+            </a>
+        </li>
+    </ul>
+
+    <h3 class="underline">Variables</h3>
+    <ul>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetVariables">
+                GetVariables
+            </a>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetVariableInfo">
+                GetVariableInfo
+            </a>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetVariableInfo?variable={{p}}:{{v}}">
+                GetVariableInfo?variable={{p}}:{{v}}
+            </a>
+        </li>
+    </ul>
+
+    <h3 class="underline">Values</h3>
+    <ul>
+        <li>
+            <div class="tooltip">
+                <a href="{{request.script_root|safe}}/{{ path }}GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}">
+                    GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}
+                </a> <span class="tooltiptext">Note: May crash browser for large values sets.</span>
+            </div>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}&startDate={{sd}}&endDate={{ed}}">
+                GetValues?location={{p}}:{{s}}&variable={{p}}:{{v}}&startDate={{sd}}&endDate={{ed}}
+            </a>
+        </li>
+        <li>
+            <a href="{{request.script_root|safe}}/{{ path }}GetValuesForASite?site={{p}}:{{s}}&startDate={{sd}}&endDate={{ed}}">
+                GetValuesForASite?site={{p}}:{{s}}&startDate={{sd}}&endDate={{ed}}
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="footer">
+    <div class="container-fluid">
+        <h3>WOFpy version: {{ ver }}</h3>
+        <p>
+            ©
+            <script>document.write(new Date().getFullYear())</script>
+            <a href="{{link}}">{{ organization }}</a> |
+            {{ address }} {{ city }}, {{ state }}, {{ zipcode }} | Maintained by
+            <a href="mailto:{{ contactemail }}">{{ contactname }}</a> | {{ phone }}
+        </p>
+    </div>
+</div>
 
 </body>
 
