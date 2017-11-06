@@ -31,6 +31,16 @@ class WOF_1_1(object):
     default_north = None
     default_east = None
 
+    organization = 'MYORGANIZATION'
+    address = '1234 DriveIn'
+    city = 'Seattle'
+    state = 'Washington'
+    zipcode = '98064'
+    contactname = 'John Smith'
+    contactemail = 'johnsmith@example.com'
+    phone = '555-555-555'
+    link = 'http://www.example.com/'
+
     _config = None
     _templates = None
 
@@ -67,6 +77,16 @@ class WOF_1_1(object):
         self.default_north = config.default_north
         self.default_south = config.default_south
         self.default_west = config.default_west
+
+        self.organization = config.organization
+        self.address = config.address
+        self.city = config.city
+        self.state = config.state
+        self.zipcode = config.zipcode
+        self.contactname = config.contactname
+        self.contactemail = config.contactemail
+        self.phone = config.phone
+        self.link = config.link
 
     def get_site_code(self, siteArg):
 
