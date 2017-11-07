@@ -666,7 +666,7 @@ class WOF_1_1(object):
         value = WaterML.ValueSingleVariable(
             qualityControlLevelCode=valueResult.QualityControlLevelID,
             methodCode=valueResult.MethodID,
-            sourceCode=valueResult.SourceID,
+            sourceCode=valueResult.SourceCode,
             timeOffset=valueResult.UTCOffset,
             censorCode=clean_censorCode,
             sampleID=valueResult.SampleID,
