@@ -560,7 +560,7 @@ class WOF_1_1(object):
     def create_qlevel_element(self, qlevelResult):
         qlevel = WaterML.QualityControlLevelType(
             qualityControlLevelID=qlevelResult.QualityControlLevelID,
-            qualityControlLevelCode=qlevelResult.QualityControlLevelCode,
+            qualityControlLevelCode=qlevelResult.QualityControlLevelID,
             definition=qlevelResult.Definition,
             explanation=qlevelResult.Explanation
         )
@@ -591,7 +591,7 @@ class WOF_1_1(object):
     def create_method_element(self, methodResult):
         method = WaterML.MethodType(
             methodID=methodResult.MethodID,
-            methodCode=methodResult.MethodCode,
+            methodCode=methodResult.MethodID,
             methodDescription=methodResult.MethodDescription,
             methodLink=methodResult.MethodLink)
 
@@ -664,9 +664,9 @@ class WOF_1_1(object):
         # clean_qcl = self.check_QualityControlLevel(valueResult.QualityControlLevel)  # noqa
 
         value = WaterML.ValueSingleVariable(
-            qualityControlLevelCode=valueResult.QualityControlLevel,
-            methodCode=valueResult.MethodCode,
-            sourceCode=valueResult.SourceCode,
+            qualityControlLevelCode=valueResult.QualityControlLevelID,
+            methodCode=valueResult.MethodID,
+            sourceCode=valueResult.SourceID,
             timeOffset=valueResult.UTCOffset,
             censorCode=clean_censorCode,
             sampleID=valueResult.SampleID,
