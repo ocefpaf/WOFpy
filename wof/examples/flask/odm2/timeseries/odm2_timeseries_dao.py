@@ -270,8 +270,9 @@ class Odm2Dao(BaseDao):
                     filter(odm2_models.ActionBy.ActionID == r[i].FeatureActionObj.ActionID).first()  # noqa
 
             r[i].tsrv_EndDateTime = edt_dict[r[i].ResultID]
-
-            w_r = model.Series(r[i], aff)
+            tsrv = self.db_session.query(odm2_models.TimeSeriesResultValues). \
+                filter(odm2_models.TimeSeriesResults.ResultID == r[i].ResultID).first()
+            w_r = model.Series(r[i], aff, tsrv)
             w_r.Variable.DataType = self.get_match('datatype', w_r.Variable.DataType)
             w_r.Variable.SampleMedium = self.get_match('samplemedium', w_r.Variable.SampleMedium)
             w_r.SampleMedium = w_r.Variable.SampleMedium
