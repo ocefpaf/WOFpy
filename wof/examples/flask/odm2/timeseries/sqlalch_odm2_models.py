@@ -89,7 +89,7 @@ class Site(wof_base.BaseSite):
 
 class Series(wof_base.BaseSeries):
     """WOF Series Model."""
-    def __init__(self, r=None, aff=None):
+    def __init__(self, r=None, aff=None, tsrv=None):
         """Initialize WOF Series Object.
 
         :param r: ODM2 TimeSeriesResult Object
@@ -108,8 +108,9 @@ class Series(wof_base.BaseSeries):
         # self.SiteID = fa_obj.SamplingFeatureID
         # self.SiteCode = sf_obj.SamplingFeatureCode
         # self.SiteName = sf_obj.SamplingFeatureName
-
-        self.Variable = Variable(v=v_obj, VarSampleMedium=r.SampledMediumCV, v_unit=u_obj,
+        self.Variable = Variable(v=v_obj, VarSampleMedium=r.SampledMediumCV,
+                                 v_tunit= tsrv.TimeAggregationIntervalUnitsObj,
+                                 v_timeinterval=tsrv.TimeAggregationInterval, v_unit=u_obj,
                                  aggregationstatisticCV=r.AggregationStatisticCV, actiontypeCV=a_obj.ActionTypeCV)
         # self.VariableID = r.VariableID
         # self.VariableCode = v_obj.VariableCode
