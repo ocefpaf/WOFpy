@@ -836,7 +836,7 @@ class WOF_1_1(object):
         # QualityControlLevel.
         qualityControlLevel = WaterML.QualityControlLevelType(
             qualityControlLevelID=seriesResult.QualityControlLevelID,
-            qualityControlLevelCode=seriesResult.QualityControlLevelCode,
+            qualityControlLevelCode=seriesResult.QualityControlLevelID,
             definition=seriesResult.Definition,
             explanation=seriesResult.Explanation
         )
