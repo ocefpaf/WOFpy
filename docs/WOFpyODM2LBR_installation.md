@@ -1,68 +1,76 @@
-## Installing WOFpy (Single or Multi)
+## Installing WOFpy with Single- or Multi-Server services and ODM2 Time Series DAO backends
 
-**In this example, `Little Bear River MySQL` and `SQLite ODM2` were used.**
-
-These notes cover installation of `WOFpy` from its `conda`; downloading and installing the Little Bear River (LBR) ODM2 MySQL and SQLite test databases; configuring WOFpy for the LBR databases; and running WOFpy. *The instructions enable the creation of "live" web services exposed to external use.* 
-
-Most of the steps were originally copied from [WOFpyODM2LBRtest_installation_notes.md](https://github.com/ODM2/WOFpy/blob/master/docs/WOFpyODM2LBRtest_installation_notes.md) with some modifications; we're no longer actively maintaining that page, but it still has useful content, including references to relevant discussions.
-
-### Testing Environments
-
-We tested WOFpy installations on Amazon Web Services.
-Deployment of WOFpy was done in an Ubuntu Server version 16.04. WOFpy is served by using [NGINX](https://www.nginx.com/) and [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/). **The instructions below assume that Amazon AWS EC2 Instance is already set up.**
-
-### [Amazon Web Services (AWS)](https://aws.amazon.com/) 
-
-Note that this installation is currently (2017-7-3) [live on the cloud](http://54.186.36.247:8080/mysqlodm2timeseries/). It will be kept live only during active testing, and will be taken down without prior notice when active testing is over. It will be reactivated in the future as needed.
-
-Specifications:
-- Ubuntu 16.04
-- MySQL 5.6
-- NGINX 1.10.2
-
-The AWS Ubuntu Server is running [Systemd init](http://www.freedesktop.org/wiki/Software/systemd/) system.
-
------------------
 
 ## Table of Contents
 
 <!-- MarkdownTOC depth=3 autolink="true" bracket="round" -->
 
-- [Install Databases](#install-databases)
+- [1. Introduction](#1.-introduction)
+    - [Deployment Environment](#deployment-environment)
+- [2. Install Sample Databases](#2.-install-sample-databases)
     - [Installing the LBR ODM2 MySQL test database](#installing-the-lbr-odm2-mysql-test-database)
     - [Downloading the LBR ODM2 SQLite test database](#downloading-the-lbr-odm2-sqlite-test-database)
-- [Install WOFpy](#install-wofpy)
-- [Installing NGINX](#installing-nginx)
-- [Development WOFpy](#development-wofpy)
+- [3. Install WOFpy](#3.-install-wofpy)
+- [4. Install NGINX](#4.-install-nginx)
+- [5. Configure Development-Mode WOFpy](#5.-configure-development-mode-wofpy)
     - [Get Configuration Folder](#get-configuration-folder)
-    - [Edit Configuration `.cfg` files](#edit-configuration-cfg-files)
-    - [Test `.cfg` files](#test-cfg-files)
+    - [Edit Configuration .cfg files](#edit-configuration-.cfg-files)
+    - [Test .cfg files](#test-.cfg-files)
     - [Set up runserver script](#set-up-runserver-script)
         - [Single Server](#single-server)
         - [Multi Server](#multi-server)
-- [Production WOFpy](#production-wofpy)
+- [6. Configure Production-Mode WOFpy](#6.-configure-production-mode-wofpy)
     - [Get Configuration Folder](#get-configuration-folder-1)
-    - [Setup `wsgi.py`](#setup-wsgipy)
+    - [Setup wsgi.py](#setup-wsgi.py)
     - [Setup upstart script](#setup-upstart-script)
     - [Setup NGINX](#setup-nginx)
-- [Checking Live instance of WOFpy](#checking-live-instance-of-wofpy)
+- [7. Check Live instance of WOFpy](#7.-check-live-instance-of-wofpy)
 
 <!-- /MarkdownTOC -->
 
 ------------------
-## Install Databases
+
+## 1. Introduction
+
+**In these instructions, we use the `Little Bear River MySQL` and `SQLite` example ODM2 time series databases to illustrate all steps. These databases are available for download.**
+
+These notes cover installation of `WOFpy` from its `conda` package; downloading and installing the Little Bear River (LBR) ODM2 MySQL and SQLite test databases; configuring WOFpy for the LBR databases; and running WOFpy. *The instructions enable the creation of "production" -- or live" -- web services exposed to external use as well as a more limited "development" -- or "test" -- version that does not use a public facing web server.*
+
+WOFpy's architecture is built on the ability to plugin CUAHSI WaterOneFlow (WOF) services to different types of data backends, including csv files, relational databases with different data models, web services, etc. Each WOFpy custom data backend type is called a "Data Access Object" (**DAO**). WOFpy reads data from a DAO and translates it into WaterML.
+
+Instructions and example databases presented in this document are focused on the ODM2 Time Series DAO. Most steps may be applied to other DAO's, but complete details and testing are only presented for this DAO type.
+
+Most of the steps were originally copied from [WOFpyODM2LBRtest_installation_notes.md](https://github.com/ODM2/WOFpy/blob/master/docs/WOFpyODM2LBRtest_installation_notes.md) with some modifications; we're no longer actively maintaining that page (it folded into this document in the near future), but it still has useful content, including references to relevant discussions.
+
+### Deployment Environment
+
+We tested WOFpy installations on Amazon Web Services.
+Deployment of WOFpy was done in an Ubuntu Server version 16.04. WOFpy is served by using [NGINX](https://www.nginx.com/) and [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/). **The instructions below assume that an Amazon AWS EC2 Instance is already set up, or that you're using your own, similar server environment.**
+
+The example deployment described in these instructions is currently (2017-11-14) live on the AWS cloud (see the [MySQL-database endpoint here](http://54.186.36.247:8080/mysqlodm2timeseries/)). It will be kept live mainly during active testing and may be taken down without prior notice when active testing is over.
+
+Specifications:
+- Ubuntu 16.04 with [`Systemd` init](http://www.freedesktop.org/wiki/Software/systemd/)
+- Python 2.7
+- MySQL 5.6
+- NGINX 1.10.2
+- uWGSI
+
+
+## 2. Install Sample Databases
+
+Two example ODM2 time series databases will be used. Both are versions of the Utah State University Little Bear River ODM2 database, but be aware that their content is slightly different.
 
 ### Installing the LBR ODM2 MySQL test database
 
 **Note: Do not use MySQL 5.7. We've identified a problem in MySQL 5.7 with loading from the LBR sample database into a geometry column. MySQL 5.6 and 5.5 have been tested successfully.**
-
 
 1. Download the Little Bear River (LBR) test MySQL database
 
 	```bash
 	wget https://raw.githubusercontent.com/ODM2/ODM2/master/usecases/littlebearriver/sampledatabases/odm2_mysql/LBR_MySQL_SmallExample.sql
 	```
-2.  If MySQL database was a stand alone in Unix, add to /etc/mysql/my.cnf : `lower_case_table_names = 1` under [mysqld]
+2.  If MySQL server is a stand-alone Linux server not already used by other applications, add to /etc/mysql/my.cnf : `lower_case_table_names = 1` under [mysqld]
 3. Create ODM2 database in MySQL. At the bash shell where the LBR SQL file was downloaded: 
 
     ```bash
@@ -84,7 +92,7 @@ wget https://github.com/ODM2/WOFpy/raw/master/test/odm2/ODM2.sqlite
 	
 -------------------
 
-## Install WOFpy
+## 3. Install WOFpy
 
 1. Install miniconda into the user home directory. `/home/ubuntu/miniconda`
 	
@@ -103,9 +111,11 @@ wget https://github.com/ODM2/WOFpy/raw/master/test/odm2/ODM2.sqlite
     ```
 
 ---------------------
-## Installing NGINX
+## 4. Install NGINX
 
-**Note: The installation step for NGINX should be the same for both server on AWS and local**
+**Notes:**
+- The installation step for NGINX should be the same for both AWS and local servers.
+- WOFpy has also been deployed on Apache web servers. Instructions will be added in the near future.
 
 1. Install nginx into the system
 
@@ -118,7 +128,7 @@ wget https://github.com/ODM2/WOFpy/raw/master/test/odm2/ODM2.sqlite
 
 	**This welcome page is located in `/var/www/html/`**
     
-You can check the status of `NGINX` server by running   
+You can check the status of `NGINX` server by running
 ```bash
 systemctl status nginx
 ```
@@ -127,12 +137,12 @@ systemctl status nginx
 
 -------------------------
 
-## Development WOFpy
+## 5. Configure Development-Mode WOFpy
 
-The steps below are used to setup WOFpy
+The steps below are used to setup WOFpy in "development" (test) mode.
 
 ### Get Configuration Folder
-Retrieve WOFpy configuration scripts and files with `wofpy_config` in your `$HOME` directory.
+Retrieve WOFpy configuration scripts and files with the `wofpy_config` shell tool (command) in your `$HOME` directory.
 
 ```bash
 wofpy_config wofpyserverdev --mode development
@@ -146,16 +156,16 @@ wofpyserverdev
 |   +-- timeseries
 ```
 
-**Note: Currently the command only provide configurations for ODM2 TimeSeries**
+**Note: Currently the command only provide configurations for ODM2 TimeSeries DAO**
 
-### Edit Configuration `.cfg` files
+### Edit Configuration .cfg files
 1. Make a copy of `odm2_config_timeseries.cfg` in the newly created `wofpy` folder, so that we can have separate config file for `MySQL` and `SQLite`.
 
     ```bash
     cp wofpyserverdev/odm2/timeseries/odm2_config_timeseries.cfg wofpyserverdev/odm2/timeseries/odm2_config_mysql.cfg
     ```
     
-2. Rename `odm2_config_timeseries.cfg` to make things clear that this is sqlite configuration by default.
+2. Copy `odm2_config_timeseries.cfg` to a file with a custom, relevant name to make it clear that this is a sqlite configuration by default.
 
     ```bash
     cp wofpyserverdev/odm2/timeseries/odm2_config_timeseries.cfg wofpyserverdev/odm2/timeseries/odm2_config_sqlite.cfg
@@ -170,6 +180,7 @@ wofpyserverdev
     # Edit this to same name above
     Vocabulary: MySQLODM2Timeseries
     Menu_Group_Name: ODM2
+	URLPATH: wofpyendpoint
     # Change this to your configuration
     Service_WSDL: http://serverip:port/networkcode/soap/cuahsi_1_0/.wsdl 
     Timezone: 00:00
@@ -203,7 +214,9 @@ wofpyserverdev
     Connection_String: mysql+mysqldb://username:password:@127.0.0.1:3306/ODM2
     ```
 
-### Test `.cfg` files
+There is also a `[Contact]` section for information about your organization. This metadata is not necessary for WOFpy to run, but it should be populated in a Production deployment to optimize the user experience and your endpoint's customization.
+
+### Test .cfg files
 
 To test `.cfg` files run the command below after activating `wofpy` conda environment `source activate wofpy`:
 
@@ -211,15 +224,9 @@ First change to `wofpy` directory
 ```bash
 cd $HOME/wofpyserverdev
 ```
-- MySQL
-    ```bash
-    python runserver_odm2_timeseries.py --config odm2_config_mysql.cfg
-    ```
-- SQLite
-    ```bash
-    python runserver_odm2_timeseries.py --config odm2_config_sqlite.cfg
-    ```
-    
+- MySQL: `python runserver_odm2_timeseries.py --config odm2_config_mysql.cfg`
+- SQLite: `python runserver_odm2_timeseries.py --config odm2_config_sqlite.cfg`
+
 **If each instance works, we are ready to deploy each database or the two together.**
 
 ### Set up runserver script
@@ -281,15 +288,13 @@ cd $HOME/wofpyserverdev
     ...
     ```
 
-    You should get a result like below. If so, you have successfully deployed `WOFpy` testing server:
-	![wofpy home](./img/wofpyhome.png)
+    You should get a result very similar to the one shown in the previous screenshot for Single Server (above). If so, you have successfully deployed `WOFpy` testing server.
     
 -----------------------
 
-## Production WOFpy
+## 6. Configure Production-Mode WOFpy
 
-
-**Follow the same steps as Test except for the step of getting configuration folder, use production mode instead.**
+**Follow the same steps as in Development-Mode configuration, except for the step of getting configuration folder, use `wofpy_config` Production Mode instead (see below).**
 
 ### Get Configuration Folder
 
@@ -308,10 +313,10 @@ wofpyserverprod
 +-- production_configs
 ```
 
-Once that's done, continue with steps in Development and below.
+**Once this is done, carry out subsequent steps in the Development-Mode section above. The proceed to the next section, below.**
     
 
-### Setup `wsgi.py`
+### Setup wsgi.py
 
 1. Move `wsgi.py` and `wofpy.ini` to the same folder as your `runserver` script. In this example `$HOME/wofpyserverprod/odm2/timeseries/`.
 
@@ -355,22 +360,22 @@ Once that's done, continue with steps in Development and below.
         sudo chown -R www-data:www-data /var/www/wofpy
         ```
         
-6. Enhance Security for WOFpy.     
-    - Move `.cfg` files to some private directory. In this example, it is moved to `wofpy_prod` in `$HOME` folder. **THIS IS HIGHLY RECOMMENDED**
+6. Enhance Security for WOFpy. **THIS IS HIGHLY RECOMMENDED, THOUGH NOT REQUIRED.**
+    - Move `.cfg` files to some private directory. In this example, it is moved to `wofpy_prod` in `$HOME` folder.
         
         ```bash
         mkdir $HOME/wofpy_prod
         sudo mv /var/www/wofpy/*.cfg /home/ubuntu/wofpy_prod/
         ```
         
-    - Edit `runserver.py` to use the new path (MultiServer).
+    - *MultiServer*: Edit `runserver.py` to use the new path
         
         ```python
         M_CONFIG_FILE = os.path.join('/home/ubuntu', 'wofpy_prod', 'odm2_config_mysql.cfg')
         S_CONFIG_FILE = os.path.join('/home/ubuntu', 'wofpy_prod','odm2_config_sqlite.cfg')
         ```
         
-    - Edit `singlerunserver.py` to use the new path (SingleServer).
+    - *SingleServer*: Edit `singlerunserver.py` to use the new path
         
         ```python
         dao = Odm2Dao(get_connection(os.path.join('/home/ubuntu', 'wofpy_prod', 'odm2_config_mysql.cfg')))
@@ -408,12 +413,15 @@ Once that's done, continue with steps in Development and below.
 2. Edit the server block configuration file to match the endpoints. `http://127.0.0.1:8080/mysqlodm2timeseries/` and `http://127.0.0.1:8080/sqliteodm2timeseries/`
 
 	``` bash
+	# For a Single Server configuration using the MySQL service only,
+	# use only this (one) service assignment
 	location /mysqlodm2timeseries {
         include uwsgi_params;
         uwsgi_pass unix:/var/www/wofpy/wofpy.sock;
     }
     
-    # Leave out the configuration below for (SingleServer)
+    # For Multi Server configuration, 
+	# include the additional service assignment(s)
     location /sqliteodm2timeseries {
         include uwsgi_params;
         uwsgi_pass unix:/var/www/wofpy/wofpy.sock;
@@ -441,6 +449,6 @@ Once that's done, continue with steps in Development and below.
     sudo systemctl enable nginx
     ```
 
-## Checking Live instance of WOFpy
+## 7. Check Live instance of WOFpy
 
 Go to `ip:8080/mysqlodm2timeseries` and `ip:8080/sqliteodm2timeseries`, *just `ip:8080/mysqlodm2timeseries` for (SingleServer)*. You should see WOFpy running. Click on the links available to see if the application is working properly.
