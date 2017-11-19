@@ -21,7 +21,7 @@
         - [Multi Server](#multi-server)
 - [6. Configure Production-Mode WOFpy](#6-configure-production-mode-wofpy)
     - [Get Configuration Folder](#get-configuration-folder-1)
-    - [Setup wsgi.py](#setup-wsgi.py)
+    - [Setup wsgi.py](#setup-wsgipy)
     - [Setup upstart script](#setup-upstart-script)
     - [Setup NGINX](#setup-nginx)
 - [7. Check Live instance of WOFpy](#7-check-live-instance-of-wofpy)
