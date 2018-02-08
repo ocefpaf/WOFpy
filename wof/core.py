@@ -104,6 +104,16 @@ class WOFConfig(object):
         default_east = None
 
 
+        organization = 'MYORGANIZATION'
+        address = '1234 DriveIn'
+        city = 'Seattle'
+        state = 'Washington'
+        zipcode = '98064'
+        contactname = 'John Smith'
+        contactemail = 'johnsmith@example.com'
+        phone = '555-555-555'
+        link = 'http://www.example.com/'
+
         def __init__(self, file_name, templates=None):
             config = configparser.RawConfigParser()
             config.read(file_name)
@@ -116,6 +126,10 @@ class WOFConfig(object):
                 self.vocabulary = config.get('WOF_1_1', 'Vocabulary')
             else:
                 self.vocabulary = config.get('WOF', 'Vocabulary')
+            if config.has_option('WOF_1_1', 'URLPATH'):
+                self.urlpath = config.get('WOF_1_1', 'URLPATH')
+            else:
+                self.urlpath = config.get('WOF', 'URLPATH')
             if config.has_option('WOF_1_1', 'Menu_Group_Name'):
                 self.menu_group_name = config.get('WOF_1_1', 'Menu_Group_Name')
             else:
@@ -202,6 +216,26 @@ class WOFConfig(object):
                     else:
                         self.default_west = -180
 
+            if config.has_section('Contact'):
+                if config.has_option('Contact', 'Organization'):
+                    self.organization = config.get('Contact', 'Organization')
+                if config.has_option('Contact', 'Address'):
+                    self.address = config.get('Contact', 'Address')
+                if config.has_option('Contact', 'City'):
+                    self.city = config.get('Contact', 'City')
+                if config.has_option('Contact', 'State'):
+                    self.state = config.get('Contact', 'State')
+                if config.has_option('Contact', 'ZipCode'):
+                    self.zipcode = config.get('Contact', 'ZipCode')
+                if config.has_option('Contact', 'Name'):
+                    self.contactname = config.get('Contact', 'Name')
+                if config.has_option('Contact', 'Email'):
+                    self.contactemail = config.get('Contact', 'Email')
+                if config.has_option('Contact', 'Phone'):
+                    self.phone = config.get('Contact', 'Phone')
+                if config.has_option('Contact', 'Link'):
+                    self.link = config.get('Contact', 'Link')
+
             if templates is not None:
                 self.TEMPLATES = templates
             elif config.has_option('WOFPY', 'Templates'):
@@ -263,7 +297,7 @@ def getSpyneApplications(wof_obj_1_0, wof_obj_1_1, templates=None):
     # wof_obj_1_0 = wof_1_0.WOF(dao, config_file)
     # wof_obj_1_1 = wof_1_1.WOF_1_1(dao,config_file)
 
-    sensorNetwork = wof_obj_1_0.network.replace('/', '').lower()
+    sensorNetwork = wof_obj_1_0.urlpath.replace('/', '').lower()
 
     soap_app_1_0 = Application(
         [wml10(wof_obj_1_0, Unicode, _SERVICE_PARAMS["s_type"])],

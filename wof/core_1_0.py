@@ -27,6 +27,16 @@ class WOF(object):
     default_unitid = None
     default_samplemedium = None
 
+    organization = 'MYORGANIZATION'
+    address = '1234 DriveIn'
+    city = 'Seattle'
+    state = 'Washington'
+    zipcode = '98064'
+    contactname = 'John Smith'
+    contactemail = 'johnsmith@example.com'
+    phone = '555-555-555'
+    link = 'http://www.example.com/'
+
     _config = None
     _templates = None
 
@@ -46,6 +56,7 @@ class WOF(object):
 
         self.network = config.network.lower()
         self.vocabulary = config.vocabulary.lower()
+        self.urlpath = config.urlpath.lower()
         self.menu_group_name = config.menu_group_name
         self.service_wsdl = config.service_wsdl
         self.timezone = config.timezone
@@ -57,6 +68,16 @@ class WOF(object):
         self.default_end_date = config.default_end_date
         self.default_unitid = config.default_unitid
         self.default_samplemedium = config.default_samplemedium
+
+        self.organization = config.organization
+        self.address = config.address
+        self.city = config.city
+        self.state = config.state
+        self.zipcode = config.zipcode
+        self.contactname = config.contactname
+        self.contactemail = config.contactemail
+        self.phone = config.phone
+        self.link = config.link
 
     '''
     For WML 1.0 many terms were embedded in the Schemas,

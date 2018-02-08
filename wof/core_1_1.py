@@ -31,6 +31,16 @@ class WOF_1_1(object):
     default_north = None
     default_east = None
 
+    organization = 'MYORGANIZATION'
+    address = '1234 DriveIn'
+    city = 'Seattle'
+    state = 'Washington'
+    zipcode = '98064'
+    contactname = 'John Smith'
+    contactemail = 'johnsmith@example.com'
+    phone = '555-555-555'
+    link = 'http://www.example.com/'
+
     _config = None
     _templates = None
 
@@ -50,6 +60,7 @@ class WOF_1_1(object):
 
         self.network = config.network.lower()
         self.vocabulary = config.vocabulary.lower()
+        self.urlpath = config.urlpath.lower()
         self.menu_group_name = config.menu_group_name
         self.service_wsdl = config.service_wsdl
         self.timezone = config.timezone
@@ -66,6 +77,16 @@ class WOF_1_1(object):
         self.default_north = config.default_north
         self.default_south = config.default_south
         self.default_west = config.default_west
+
+        self.organization = config.organization
+        self.address = config.address
+        self.city = config.city
+        self.state = config.state
+        self.zipcode = config.zipcode
+        self.contactname = config.contactname
+        self.contactemail = config.contactemail
+        self.phone = config.phone
+        self.link = config.link
 
     def get_site_code(self, siteArg):
 
@@ -539,7 +560,7 @@ class WOF_1_1(object):
     def create_qlevel_element(self, qlevelResult):
         qlevel = WaterML.QualityControlLevelType(
             qualityControlLevelID=qlevelResult.QualityControlLevelID,
-            qualityControlLevelCode=qlevelResult.QualityControlLevelCode,
+            qualityControlLevelCode=qlevelResult.QualityControlLevelID,
             definition=qlevelResult.Definition,
             explanation=qlevelResult.Explanation
         )
@@ -559,7 +580,8 @@ class WOF_1_1(object):
                 unitID=offsetTypeResult.OffsetUnits.UnitsID,
                 unitAbbreviation=offsetTypeResult.OffsetUnits.UnitsAbbreviation,  # noqa
                 unitName=offsetTypeResult.OffsetUnits.UnitsName,
-                unitType=offsetTypeResult.OffsetUnits.UnitsType
+                unitType=offsetTypeResult.OffsetUnits.UnitsType,
+                unitCode=offsetTypeResult.OffsetUnits.UnitsID
             )
 
             offset.units = units
@@ -569,7 +591,7 @@ class WOF_1_1(object):
     def create_method_element(self, methodResult):
         method = WaterML.MethodType(
             methodID=methodResult.MethodID,
-            methodCode=methodResult.MethodCode,
+            methodCode=methodResult.MethodID,
             methodDescription=methodResult.MethodDescription,
             methodLink=methodResult.MethodLink)
 
@@ -642,8 +664,8 @@ class WOF_1_1(object):
         # clean_qcl = self.check_QualityControlLevel(valueResult.QualityControlLevel)  # noqa
 
         value = WaterML.ValueSingleVariable(
-            qualityControlLevelCode=valueResult.QualityControlLevel,
-            methodCode=valueResult.MethodCode,
+            qualityControlLevelCode=valueResult.QualityControlLevelID,
+            methodCode=valueResult.MethodID,
             sourceCode=valueResult.SourceCode,
             timeOffset=valueResult.UTCOffset,
             censorCode=clean_censorCode,
@@ -814,7 +836,7 @@ class WOF_1_1(object):
         # QualityControlLevel.
         qualityControlLevel = WaterML.QualityControlLevelType(
             qualityControlLevelID=seriesResult.QualityControlLevelID,
-            qualityControlLevelCode=seriesResult.QualityControlLevelCode,
+            qualityControlLevelCode=seriesResult.QualityControlLevelID,
             definition=seriesResult.Definition,
             explanation=seriesResult.Explanation
         )
@@ -869,6 +891,7 @@ class WOF_1_1(object):
 
         if variableResult.VariableUnits:
             units = WaterML.UnitsType(
+                unitID=variableResult.VariableUnitsID,
                 unitAbbreviation=variableResult.VariableUnits.UnitsAbbreviation,  # noqa
                 unitCode=variableResult.VariableUnitsID,
                 unitType=clean_variableUnitsType,
@@ -885,7 +908,8 @@ class WOF_1_1(object):
                 unitName=variableResult.TimeUnits.UnitsName,
                 unitDescription=variableResult.TimeUnits.UnitsName,
                 unitType=variableResult.TimeUnits.UnitsType,
-                unitAbbreviation=variableResult.TimeUnits.UnitsAbbreviation)
+                unitAbbreviation=variableResult.TimeUnits.UnitsAbbreviation,
+                unitCode=variableResult.TimeUnits.UnitsID)
 
             timeSupport.set_unit(timeUnits)
 
