@@ -48,7 +48,7 @@ def add_flask_routes(app,path, servicesPath,
     # path = wof_inst.network
     # servicesPath =  '/'+wof_inst.network
 
-    #@app.route( '/')
+    @app.route( '/')
     def index():
         return render_template('index.html',
                                rest10=path+'/rest_1_0/',
