@@ -37,8 +37,12 @@ Follow the steps below to run this example.
    variable in **runserver_odm_1_1.py** to match an open port on your computer,
    if necessary.  Then save and close the file.
 #. Open a command window in the **examples/odm_1_1** folder and enter:
-   ``python runserver_odm11.py
+
+..code:: bash
+
+    python runserver_odm11.py
     --config=lbr_config.cfg
-    --connection=connection.file``
+    --connection=connection.file
+
 #. In your command window you should see a message indicating that the service
    is running along with instructions for accessing the service.

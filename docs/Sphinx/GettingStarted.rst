@@ -129,7 +129,7 @@ Follow the steps below to run this example.
    is running along with instructions for accessing the service.  
 
 ODM 1.1 SQL Server Example
-----------------------
+--------------------------
 
 This example is located in the **examples/flask/odm_1_1** folder.
 
@@ -153,16 +153,20 @@ Follow the steps below to run this example.
    variable in **runserver_odm_1_1.py** to match an open port on your computer,
    if necessary.  Then save and close the file.
 #. Open a command window in the **examples/flask/odm_1_1** folder and enter:
-   ``python runserver_odm_1_1.py
+
+.. code:: bash
+
+    python runserver_odm_1_1.py
     --config=lbr_config.cfg
-    --connection=lbr.connection``
+    --connection=lbr.connection
+
 #. In your command window you should see a message indicating that the service
    is running along with instructions for accessing the service.
 
    ODM1Services
 
 ODM 2 SQL Server Example
-----------------------
+------------------------
 
 This example is located in the **examples/flask/odm2** folder.
 

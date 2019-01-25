@@ -7,7 +7,7 @@ CHANGES
 **********************************************
 
 2.0.0001-alpha
-============
+==============
 * Added ODM2 examples
 * Added WOF 1.1 and WaterML 1.1 services
 * Simplified the implementation of services

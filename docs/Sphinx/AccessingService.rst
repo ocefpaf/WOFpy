@@ -15,7 +15,7 @@ The services can  be found:
 * http://127.0.0.1:8080/{network}/soap/wateroneflow_1_1
 
 Accessing WOFpy REST Web Services for WaterML 1 and WaterML2
-=================================
+============================================================
 
 Running the examples is a great way to learn the REST syntax for accessing data
 with WOFpy.  The examples create a web page with sample URIs illustrating
