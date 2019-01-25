@@ -28,12 +28,10 @@ matrix:
   - python: 2.7
     env: TEST_TARGET=build_cbi
   - python: 2.7
-    env: TEST_TARGET=coding_standards
+    env: TEST_TARGET=docs
   allow_failures:
   - python: 2.7
     env: TEST_TARGET=build_cbi
-  - python: 2.7
-    env: TEST_TARGET=coding_standards
 
 
 before_install:
