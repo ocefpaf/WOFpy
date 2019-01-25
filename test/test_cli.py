@@ -20,7 +20,7 @@ def mkdtemp():
 def test_makedirs_do_not_overwrite(mkdtemp):
     _directory, _stat = mkdtemp
     with pytest.raises(OSError):
-            makedirs(_directory)
+        makedirs(_directory)
 
 
 @pytest.mark.skipif(sys.platform == 'win32',
