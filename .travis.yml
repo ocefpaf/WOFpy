@@ -2,6 +2,11 @@ language: python
 
 sudo: false
 
+env:
+  global:
+    # Doctr deploy key for ODM2/WOFpy
+    - secure: "lewbC9uC+3aWaZdp0/lOWOl/5+pAIQR8yhbgISaZiE/cJCmBYQ9fpbhybjFfuai72/kzslT1gJTTSunx/Iwolpp1PwPv6EIqdeURntDTaXxIzxVCg2fYynrjY6GNgmPZRXWeBtE+Zp5+B1ixj8sVF8TKirKI5juORImM1XmiHnUQlnF8qoaalU+3dhNuKUMWfoYUujdarlJtr202skmC5cELx0F+DC+mLnDag+2s4zhG08syaay+VzD0e2Pl6++IHIfLQxENjubKQhXwTlryW7ixQ6TpnUYaUQ6wHKVkJtc1KQUvLH9K3olax6uLO1x1ksXoE+fOwoNHshWm21pr6FJLKL2Nl/oCuWkkNAuO5VH/VuyQNVRXAMV4/ivaFuZArnGODmD8HZuoqcfbUV20cLc5LfGRGxOWoCayLBdQ5mbJ/OF/ZyDUhyTKyzYICrzc4vPmNKtyxCQm0q/qNtG7j58AyByBDSy7qWNjBWYWZ5wnoQa3g8uGMKDWXR4LhbhF/IrDikqdT2+QdtNcC/WNqyC7eM1wc7YjEk4LzRkDI5rSXur+0GbhISQmAdGOHCKJwOK5a81NzKpJgD+Ck/jdbN/rxl62nUORuX19PFUE4DHzgBAFOrPHHGwd3N9UZUJa0Pwi3xwojHNqjIl7BWaQjmXfImAt7riEd5bcbsOxy74="
+
 dist: trusty
 
 services:
@@ -78,4 +83,14 @@ script:
   - if [[ $TEST_TARGET == 'coding_standards' ]]; then
       flake8 --max-line-length=105 wof ;
       flake8 --max-line-length=105 test ;
+    fi
+
+  - if [[ $TEST_TARGET == 'docs' ]]; then
+      set -e ;
+      conda install doctr ;
+      pushd docs/Sphinx ;
+      make clean html linkcheck ;
+      popd ;
+      python -m doctr deploy --sync .;
+      python -m doctr deploy --sync --no-require-master  --built-docs docs/Sphinx/_build/html "docs-$TRAVIS_BRANCH" ;
     fi

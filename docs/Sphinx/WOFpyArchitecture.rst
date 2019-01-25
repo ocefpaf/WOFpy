@@ -56,57 +56,58 @@ WOFpy file structure
 ====================
 When you download and open WOFpy.  You will notice that it contains the following file structure.
 
-.. note::
-    (Only selected folders are expanded).    
-\WOFPY
- |   readme.txt
- |   setup.py
+.. code:: bash
 
-+---docs\
+    (Only selected folders are expanded).
+    \WOFPY
+    |   readme.txt
+    |   setup.py
 
-+---examples\
-    |   barebones
-    |   csv
-    |   cbi
-    |   odm_1_1
-    |   odm2
-    |   swis
+    +---docs\
 
-+---test\
+    +---examples\
+        |   barebones
+        |   csv
+        |   cbi
+        |   odm_1_1
+        |   odm2
+        |   swis
 
-+---wof\
-    |   core.py
-    |   core_1_1.py
-    |   core_1_0.py
-    |   dao.py
-    |   models.py
-    |   WaterML.py
-    |   WaterML_1_1.py
-    |   WofWsdls.py
-    |   __init__.py
+    +---test\
 
-    +---flask\
-        |   config.py
+    +---wof\
+        |   core.py
+        |   core_1_1.py
+        |   core_1_0.py
+        |   dao.py
+        |   models.py
+        |   WaterML.py
+        |   WaterML_1_1.py
+        |   WofWsdls.py
         |   __init__.py
-        |
-        +---templates\
-               index.html
-               wml2_values_template.xml
-               wsdl_temp.wsdl
-    +---apps\
-        |   __init__.py
-        |   spyned_1_0.py
-        |   spyned_1_1.py
-        |   waterml2.py
-        |   wsdl.py
-        +---templates\
 
-            |       wml2_values_template.xml
-            |       wsdl_1_1_template.wsdl
-            |       index.html
-            |       index_1_0.html
-            |       index_1_1.html
-            |       index_2.html
+        +---flask\
+            |   config.py
+            |   __init__.py
+            |
+            +---templates\
+                index.html
+                wml2_values_template.xml
+                wsdl_temp.wsdl
+        +---apps\
+            |   __init__.py
+            |   spyned_1_0.py
+            |   spyned_1_1.py
+            |   waterml2.py
+            |   wsdl.py
+            +---templates\
+
+                |       wml2_values_template.xml
+                |       wsdl_1_1_template.wsdl
+                |       index.html
+                |       index_1_0.html
+                |       index_1_1.html
+                |       index_2.html
 
 The WOFPy api uses spyne.io. This allows for the API to be utilized by multiple service platforms.
   The present examples utlize the flask service stack.
