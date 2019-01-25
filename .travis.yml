@@ -79,7 +79,7 @@ script:
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
       pushd docs/Sphinx ;
-      make clean html linkcheck ;
+      make clean html ;
       popd ;
       conda deactivate && conda install doctr ;
       python -m doctr deploy --sync .;
