@@ -23,14 +23,10 @@ matrix:
   include:
   - name: "default"
     env: TEST_TARGET=default PY=2.7
-  - name: "default-3.7"
-    env: TEST_TARGET=default PY=3.7
   - name: "cli"
     env: TEST_TARGET=cli PY=2.7
   - name: "build_cbi"
     env: TEST_TARGET=build_cbi PY=2.7
-  - name: "coding_standards"
-    env: TEST_TARGET=coding_standards PY=2.7
   - name: "docs"
     env: TEST_TARGET=docs PY=2.7
   allow_failures:
@@ -80,17 +76,12 @@ script:
       popd ;
     fi
 
-  - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-      flake8 --max-line-length=105 wof ;
-      flake8 --max-line-length=105 test ;
-    fi
-
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
       pushd docs/Sphinx ;
-      make clean html linkcheck ;
+      make clean html ;
       popd ;
-      conda deactivate && conda install doctr ;  # doctr is python >=3.6 but wofpy is python 2.7 only.
+      source deactivate && conda create --name DOCTR python=3.7 doctr && source activate DOCTR ;
       python -m doctr deploy --sync .;
       python -m doctr deploy --sync --no-require-master  --built-docs docs/Sphinx/_build/html "docs-$TRAVIS_BRANCH" ;
     fi
