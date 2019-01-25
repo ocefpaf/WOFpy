@@ -23,7 +23,7 @@ matrix:
   include:
   - python: 2.7
     env: TEST_TARGET=default
-  - python: 3.6
+  - python: 3.7
     env: TEST_TARGET=default
   - python: 2.7
     env: TEST_TARGET=cli
@@ -31,8 +31,10 @@ matrix:
     env: TEST_TARGET=build_cbi
   - python: 2.7
     env: TEST_TARGET=coding_standards
+  - python: 3.7
+    env: TEST_TARGET=docs
   allow_failures:
-  - python: 3.6
+  - python: 3.7
     env: TEST_TARGET=default
   - python: 2.7
     env: TEST_TARGET=build_cbi
@@ -41,18 +43,17 @@ matrix:
 
 
 before_install:
-  - ./ci-helpers/postgres_setup.sh
-  - wget http://bit.ly/miniconda -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
-  - conda update conda
-  - conda config --set show_channel_urls true
-  - conda config --add channels conda-forge --force
-  - conda create -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
-  - source activate TEST
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      conda install configparser ;
+  - if [[ $TEST_TARGET != 'docs' ]]; then
+      ./ci-helpers/postgres_setup.sh ;
+      wget http://bit.ly/miniconda -O miniconda.sh ;
+      bash miniconda.sh -b -p $HOME/miniconda ;
+      export PATH="$HOME/miniconda/bin:$PATH" ;
+      conda config --set always_yes yes --set changeps1 no --set show_channel_urls true ;
+      conda update conda ;
+      conda config --set show_channel_urls true ;
+      conda config --add channels conda-forge --force ;
+      conda create -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt ;
+      source activate TEST ;
     fi
 
 # Test source distribution.
@@ -64,12 +65,12 @@ before_script:
 
 script:
   - if [[ $TEST_TARGET == 'default' ]]; then
-      py.test -s -rxs -v -k "not cbi" ;
+      pytest -s -rxs -v -k "not cbi" ;
     fi
 
   - if [[ $TEST_TARGET == 'build_cbi' ]]; then
       python wof/examples/flask/cbi/build_cbi_cache.py ;
-      py.test -s -rxs -v -k "cbi" ;
+      pytest -s -rxs -v -k "cbi" ;
     fi
 
   - if [[ $TEST_TARGET == 'cli' ]]; then
@@ -87,7 +88,7 @@ script:
 
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
-      conda install doctr ;
+      conda install doctr sphinx;
       pushd docs/Sphinx ;
       make clean html linkcheck ;
       popd ;
