@@ -32,7 +32,7 @@ matrix:
   - name: "coding_standards"
     env: TEST_TARGET=coding_standards PY=2.7
   - name: "docs"
-    env: TEST_TARGET=docs PY=3.7
+    env: TEST_TARGET=docs PY=2.7
   allow_failures:
   - name: "default-3.7"
     env: TEST_TARGET=default PY=3.7
@@ -52,10 +52,8 @@ before_install:
   - conda update conda
   - conda config --set show_channel_urls true
   - conda config --add channels conda-forge --force
-  - if [[ $TEST_TARGET != 'docs' ]]; then
-      conda create -n TEST python=$PY --file requirements.txt --file requirements-dev.txt ;
-      source activate TEST ;
-    fi
+  - conda create -n TEST python=$PY --file requirements.txt --file requirements-dev.txt
+  - source activate TEST
 
 # Test source distribution.
 install:
@@ -89,10 +87,10 @@ script:
 
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
-      conda install doctr sphinx;
       pushd docs/Sphinx ;
       make clean html linkcheck ;
       popd ;
+      conda deactivate && conda install doctr ;  # doctr is python >=3.6 but wofpy is python 2.7 only.
       python -m doctr deploy --sync .;
       python -m doctr deploy --sync --no-require-master  --built-docs docs/Sphinx/_build/html "docs-$TRAVIS_BRANCH" ;
     fi
