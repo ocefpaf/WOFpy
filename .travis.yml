@@ -74,11 +74,6 @@ script:
       popd ;
     fi
 
-  - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-      flake8 --max-line-length=105 wof ;
-      flake8 --max-line-length=105 test ;
-    fi
-
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
       conda install doctr ;
