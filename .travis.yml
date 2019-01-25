@@ -23,14 +23,10 @@ matrix:
   include:
   - name: "default"
     env: TEST_TARGET=default PY=2.7
-  - name: "default-3.7"
-    env: TEST_TARGET=default PY=3.7
   - name: "cli"
     env: TEST_TARGET=cli PY=2.7
   - name: "build_cbi"
     env: TEST_TARGET=build_cbi PY=2.7
-  - name: "coding_standards"
-    env: TEST_TARGET=coding_standards PY=2.7
   - name: "docs"
     env: TEST_TARGET=docs PY=2.7
   allow_failures:
@@ -78,11 +74,6 @@ script:
       wofpy_config wofpyserver --mode=production --overwrite=soft ;
       wofpy_config wofpyserver -m production -o hard ;
       popd ;
-    fi
-
-  - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-      flake8 --max-line-length=105 wof ;
-      flake8 --max-line-length=105 test ;
     fi
 
   - if [[ $TEST_TARGET == 'docs' ]]; then
