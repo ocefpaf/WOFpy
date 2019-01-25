@@ -76,10 +76,11 @@ script:
 
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
-      conda install doctr ;
       pushd docs/Sphinx ;
       make clean html linkcheck ;
       popd ;
+      conda deactivate && conda install doctr ;  # doctr is python >=3.6 but wofpy is python 2.7 only.
+      conda install doctr ;
       python -m doctr deploy --sync .;
       python -m doctr deploy --sync --no-require-master  --built-docs docs/Sphinx/_build/html "docs-$TRAVIS_BRANCH" ;
     fi
