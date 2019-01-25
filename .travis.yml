@@ -79,3 +79,13 @@ script:
       flake8 --max-line-length=105 wof ;
       flake8 --max-line-length=105 test ;
     fi
+
+  - if [[ $TEST_TARGET == 'docs' ]]; then
+      set -e ;
+      conda install doctr ;
+      pushd docs/Sphinx ;
+      make clean html linkcheck ;
+      popd ;
+      python -m doctr deploy --sync .;
+      python -m doctr deploy --sync --no-require-master  --built-docs docs/Sphinx/_build/html "docs-$TRAVIS_BRANCH" ;
+    fi
