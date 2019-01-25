@@ -81,7 +81,7 @@ script:
       pushd docs/Sphinx ;
       make clean html ;
       popd ;
-      source deactivate && conda install doctr ;
+      source deactivate && conda create --name DOCTR python=3.7 doctr && source activate DOCTR ;
       python -m doctr deploy --sync .;
       python -m doctr deploy --sync --no-require-master  --built-docs docs/Sphinx/_build/html "docs-$TRAVIS_BRANCH" ;
     fi
