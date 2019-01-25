@@ -56,14 +56,14 @@ Downloading Time Series Values
 
 .. note::
     The time format is `ISO time
-    <http://www.iso.org/iso/date_and_time_format>`_.  You can leave out the
+    <https://www.iso.org/iso-8601-date-and-time-format.html>`_.  You can leave out the
     time component and just write YYYY-MM-DD.  You can specify time zone by
     appending the offset from Universal Time Coordinates (UTC) in hours to the
     end of the date string, or by appending Z to indicate UTC.  For example,
     to specify April 5, 2011, 5:00 PM in US Central Standard Time:
     ``2011-04-05T05:00-06``
 
-    See `Wikipedia <http://en.wikipedia.org/wiki/ISO_8601>`_ for more examples.
+    See `Wikipedia <https://en.wikipedia.org/wiki/ISO_8601>`_ for more examples.
 
 WaterML 2
 =========
