@@ -23,17 +23,21 @@ matrix:
   include:
   - python: 2.7
     env: TEST_TARGET=default
+  - python: 3.6
+    env: TEST_TARGET=default
   - python: 2.7
     env: TEST_TARGET=cli
   - python: 2.7
     env: TEST_TARGET=build_cbi
   - python: 2.7
-    env: TEST_TARGET=docs
+    env: TEST_TARGET=coding_standards
   allow_failures:
+  - python: 3.6
+    env: TEST_TARGET=default
   - python: 2.7
     env: TEST_TARGET=build_cbi
   - python: 2.7
-    env: TEST_TARGET=docs
+    env: TEST_TARGET=coding_standards
 
 
 before_install:
@@ -47,6 +51,9 @@ before_install:
   - conda config --add channels conda-forge --force
   - conda create -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
   - source activate TEST
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      conda install configparser ;
+    fi
 
 # Test source distribution.
 install:
@@ -57,12 +64,12 @@ before_script:
 
 script:
   - if [[ $TEST_TARGET == 'default' ]]; then
-      pytest -s -rxs -v -k "not cbi" ;
+      py.test -s -rxs -v -k "not cbi" ;
     fi
 
   - if [[ $TEST_TARGET == 'build_cbi' ]]; then
       python wof/examples/flask/cbi/build_cbi_cache.py ;
-      pytest -s -rxs -v -k "cbi" ;
+      py.test -s -rxs -v -k "cbi" ;
     fi
 
   - if [[ $TEST_TARGET == 'cli' ]]; then
@@ -73,12 +80,17 @@ script:
       popd ;
     fi
 
+  - if [[ $TEST_TARGET == 'coding_standards' ]]; then
+      flake8 --max-line-length=105 wof ;
+      flake8 --max-line-length=105 test ;
+    fi
+
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
+      conda install doctr ;
       pushd docs/Sphinx ;
       make clean html linkcheck ;
       popd ;
-      conda deactivate && conda install doctr ;  # doctr is python >=3.6 but wofpy is python 2.7 only.
       python -m doctr deploy --sync .;
       python -m doctr deploy --sync --no-require-master  --built-docs docs/Sphinx/_build/html "docs-$TRAVIS_BRANCH" ;
     fi
