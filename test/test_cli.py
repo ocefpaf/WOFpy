@@ -17,24 +17,24 @@ def mkdtemp():
     shutil.rmtree(_directory)
 
 
-def test_makedirs_do_not_overwrite():
-    _directory, _ = mkdtemp().next()
+def test_makedirs_do_not_overwrite(mkdtemp):
+    _directory, _stat = mkdtemp
     with pytest.raises(OSError):
-        makedirs(_directory)
+            makedirs(_directory)
 
 
 @pytest.mark.skipif(sys.platform == 'win32',
                     reason='st_ino does not work on Windows')
-def test_makedirs_overwrite_soft():
-    _directory, _stat = mkdtemp().next()
+def test_makedirs_overwrite_soft(mkdtemp):
+    _directory, _stat = mkdtemp
     makedirs(_directory, overwrite='soft')
     stat = os.stat(_directory)
     assert _stat.st_ino == stat.st_ino
 
 
 
-def test_cli_overwrite_hard():
-    _directory, _ = mkdtemp().next()
+def test_cli_overwrite_hard(mkdtemp):
+    _directory, _stat = mkdtemp
     args = {
         'INDIR': _directory,
         '--mode': 'production',
