@@ -21,11 +21,12 @@ WOFpy uses Python version 2.7.
 Documentation
 -------------
 
-WOFpy documentation is currently (2017 August-September) being overhauled.
+WOFpy documentation is currently (2019 January) being overhauled.
 Much of the previous documentation available at
-[http://pythonhosted.org/WOFpy](http://pythonhosted.org/WOFpy)
-is out of date and should be used with care,
-mainly for conceptual descriptions.
+[http://odm2.github.io/ODM2PythonAPI/](http://odm2.github.io/ODM2PythonAPI/)
+is out of date and should be used with care, mainly for conceptual descriptions.
+
+If you happen to run into the older documentation at http://pythonhosted.org/WOFpy, don't use it. It's not being maintained. It'll be removed eventually.
 
 Installation
 ------------
